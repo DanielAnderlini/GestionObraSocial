@@ -1,0 +1,331 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+GestionOSPRERA
+</name>
+</assembly>
+<members>
+<member name="T:GestionOSPRERA.My.Resources.Resources">
+<summary>
+  Clase de recurso fuertemente tipado, para buscar cadenas traducidas, etc.
+</summary>
+</member>
+<member name="P:GestionOSPRERA.My.Resources.Resources.ResourceManager">
+<summary>
+  Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.
+</summary>
+</member>
+<member name="P:GestionOSPRERA.My.Resources.Resources.Culture">
+<summary>
+  Reemplaza la propiedad CurrentUICulture del subproceso actual para todas las
+  búsquedas de recursos mediante esta clase de recurso fuertemente tipado.
+</summary>
+</member>
+<member name="P:GestionOSPRERA.frmAfiliadosAlmacenar._Afiliados">
+ <summary>
+ Propiedad que indica el o la Afiliados
+ </summary>
+ <value>mAfiliados valor del tipo Entidades.Afiliados.</value>
+ <returns>mAfiliados valor del tipo Entidades.Afiliados.</returns>
+ <remarks>Propiedad Afiliados.</remarks>
+</member>
+<member name="M:GestionOSPRERA.frmAfiliadosAlmacenar.#ctor">
+ <summary>
+ Procedimiento ejecutado al instanciar el formulario
+ </summary>
+</member>
+<member name="M:GestionOSPRERA.frmAfiliadosAlmacenar.Inicializar">
+ <summary>
+ Procedimiento utilizado para inicializar el formulario
+ </summary>
+</member>
+<member name="M:GestionOSPRERA.frmAfiliadosAlmacenar.Almacenar">
+ <summary>
+ Procedimiento utilizad para almacenar la colección de afiliados
+ </summary>
+</member>
+<member name="M:GestionOSPRERA.frmAfiliadosImportacionDBF.Inicializar">
+ <summary>
+ Procedimiento utilizado para inicializar el formulrio
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.frmAfiliadosImportacionDBF.ActualizaBarraEstado">
+ <summary>
+ Procedimiento utilizado para actualizar la barra de estado
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.frmAfiliadosImportacionDBF.CargarSugerencias">
+ <summary>
+ Procedimiento utilizado para cargar las sugerencia de los controles
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.frmAfiliadosImportacionDBF.Proceso">
+ <summary>
+ Procedimiento utilizado para ejecutar el proceso de importación
+ </summary>
+</member>
+<member name="M:GestionOSPRERA.frmAfiliadosImportacionDBF.Leer">
+ <summary>
+ Procedimiento utilizad para leer e importar los datos desde el origen
+ </summary>
+</member>
+<member name="M:GestionOSPRERA.frmAfiliadosImportacionDBF.AlmacenarDatos">
+ <summary>
+ Procedimiento utilizado para almacenar los datos leídos
+ </summary>
+</member>
+<member name="M:GestionOSPRERA.frmAfiliadosImportacionDBF.AlmacenarDatosTodos">
+ <summary>
+ Procedimiento utilizado para almacenar los datos leídos
+ </summary>
+</member>
+<member name="P:GestionOSPRERA.frmAfiliadosSeleccion._Afiliados">
+ <summary>
+ Propiedad que indica el o la Afiliados
+ </summary>
+ <value>mAfiliados valor del tipo Entidades.Afiliados.</value>
+ <returns>mAfiliados valor del tipo Entidades.Afiliados.</returns>
+ <remarks>Propiedad Afiliados.</remarks>
+</member>
+<member name="M:GestionOSPRERA.frmAfiliadosSeleccion.#ctor">
+ <summary>
+ Procedimiento ejecutado al instanciar la clase
+ </summary>
+</member>
+<member name="M:GestionOSPRERA.frmAfiliadosSeleccion.Inicializar">
+ <summary>
+ Procedimiento utilizado para inicializar el formulrio
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.frmAfiliadosSeleccion.CargarSugerencias">
+ <summary>
+ Procedimiento utilizado para cargar las sugerencia de los controles
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.frmAfiliadosSeleccion.ConfigurarListView">
+ <summary>
+ Procedimiento utilizado para configurar el control ListView
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:GestionOSPRERA.frmCondicionAfiliatoriaAlmacenar._Afiliados">
+ <summary>
+ Propiedad que indica el o la Afiliados
+ </summary>
+ <value>mAfiliados valor del tipo Entidades.Afiliados.</value>
+ <returns>mAfiliados valor del tipo Entidades.Afiliados.</returns>
+ <remarks>Propiedad Afiliados.</remarks>
+</member>
+<member name="P:GestionOSPRERA.frmCondicionAfiliatoriaAlmacenar._CadenaConexionAnual">
+ <summary>
+ Propiedad que indica el o la CadenaConexionAnual
+ </summary>
+ <value>mCadenaConexionAnual valor del tipo String.</value>
+ <returns>mCadenaConexionAnual valor del tipo String.</returns>
+ <remarks>Propiedad CadenaConexionAnual.</remarks>
+</member>
+<member name="P:GestionOSPRERA.frmCondicionAfiliatoriaAlmacenar._Ano">
+ <summary>
+ Propiedad que indica el o la Ano
+ </summary>
+ <value>mAno valor del tipo Int16.</value>
+ <returns>mAno valor del tipo Int16.</returns>
+ <remarks>Propiedad Ano.</remarks>
+</member>
+<member name="P:GestionOSPRERA.frmCondicionAfiliatoriaAlmacenar._Mes">
+ <summary>
+ Propiedad que indica el o la Mes
+ </summary>
+ <value>mMes valor del tipo Int16.</value>
+ <returns>mMes valor del tipo Int16.</returns>
+ <remarks>Propiedad Mes.</remarks>
+</member>
+<member name="P:GestionOSPRERA.frmCondicionAfiliatoriaAlmacenar._AgregarAfiliado">
+ <summary>
+ Propiedad que indica el o la AgregarAfiliado
+ </summary>
+ <value>mAgregarAfiliado valor del tipo Boolean.</value>
+ <returns>mAgregarAfiliado valor del tipo Boolean.</returns>
+ <remarks>Propiedad AgregarAfiliado.</remarks>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaAlmacenar.#ctor">
+ <summary>
+ Procedimiento ejecutado al instanciar el formulario
+ </summary>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaAlmacenar.Inicializar">
+ <summary>
+ Procedimiento utilizado para inicializar el formulario
+ </summary>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaAlmacenar.Almacenar">
+ <summary>
+ Procedimiento utilizad para almacenar la colección de afiliados
+ </summary>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaAnual_Afiliado.Inicializar">
+ <summary>
+ Procedimiento utilizado para inicializar el formulrio
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaAnual_Afiliado.ActualizaBarraEstado">
+ <summary>
+ Procedimiento utilizado para actualizar la barra de estado
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaAnual_Afiliado.CargarSugerencias">
+ <summary>
+ Procedimiento utilizado para cargar las sugerencia de los controles
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaAnual_Afiliado.ConfigurarListView">
+ <summary>
+ Procedimiento utilizado para configurar el control ListView
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaAnual_Afiliado.CargarAfiliado(System.Int64)">
+ <summary>
+ Procedimiento utilizado para cargar la colección desde la base de datos
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaAnual_Afiliado.CargarCondicionesAfiliatorias">
+ <summary>
+ Procedimiento utilizado para cargar la colección desde la base de datos
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaAnual_Afiliado.CargarListView">
+ <summary>
+ Procedimiento utilizado para cargar el control ListView lvCondicionAfiliatoria
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaAnual_Afiliado.InicializarControlesDatos">
+ <summary>
+ Procedimiento utilizado para inicializar los controles relacionados a los datos del afiliado
+ </summary>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaAnual_Afiliado.BuscarAfiliado">
+ <summary>
+ Procedimiento utilizado para buscar los afiliados y sus datos
+ </summary>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaImportacionDBF.Inicializar">
+ <summary>
+ Procedimiento utilizado para inicializar el formulrio
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaImportacionDBF.ActualizaBarraEstado">
+ <summary>
+ Procedimiento utilizado para actualizar la barra de estado
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaImportacionDBF.CargarSugerencias">
+ <summary>
+ Procedimiento utilizado para cargar las sugerencia de los controles
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaImportacionDBF.BuscarAfiliado(System.Int64,System.Int64)">
+ <summary>
+ Función utilizada para buscar un afiliado desde la base de datos
+ </summary>
+ <param name="CUIL_Titular">Obligatorio. CUIL del titular.</param>
+ <param name="DNI">Oblligatorio. DNI del afiliado.</param>
+ <returns>Objeto de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaImportacionDBF.Proceso">
+ <summary>
+ Procedimiento utilizado para ejecutar el proceso de importación
+ </summary>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaImportacionDBF.Leer">
+ <summary>
+ Procedimiento utilizad para leer e importar los datos desde el origen
+ </summary>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaImportacionDBF.BuscarAfiliadoBD(Entidades.Afiliado)">
+ <summary>
+ Función utilizada para buscar un afiliado desde la base de datos
+ </summary>
+ <param name="afiliado">Obligatorio. Objeto de la clase "Afiliado" que se desea buscar.</param>
+ <returns>Objeto de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaImportacionDBF.AlmacenarDatos">
+ <summary>
+ Procedimiento uilizado para almacenar los datos leídos
+ </summary>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaImportacionDBF.AlmacenarAfiliado(Entidades.Afiliado)">
+ <summary>
+ Procedimiento utilizado para dar de alta un afiliado
+ </summary>
+ <param name="afiliado">Obligatorio. Objeto de la clase "Afiliado".</param>
+</member>
+<member name="M:GestionOSPRERA.frmCondicionAfiliatoriaImportacionDBF.AlmacenarDatosTodos">
+ <summary>
+ Procedimiento utilizado para almacenar los datos leídos
+ </summary>
+</member>
+<member name="M:GestionOSPRERA.frmMenu.Inicializar">
+ <summary>
+ Procedimiento utilizado para inicializar el formulario
+ </summary>
+</member>
+<member name="M:GestionOSPRERA.frmMenu.ActualizaBarraEstado">
+ <summary>
+ Procedimiento utilizado para actualizar la barra de estado
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:GestionOSPRERA.General.CadenaTextoUnicamente(System.String)">
+ <summary>
+ Función utililizada para analizar las cadena de texto
+ </summary>
+ <param name="Cadena">Obligatorio. Cadena de caracteres a analizar.</param>
+ <returns>Cadena de caracteres analizada.</returns>
+</member>
+<member name="M:GestionOSPRERA.General.NombreBaseDatosMovimiento(System.Int16)">
+ <summary>
+ Función utilizada para determinar el nombre de la base de datos de movimientos de caurdo a un año
+ </summary>
+ <param name="Ano">Obligatorio. Años al que pertenecen los datos de movimiento.</param>
+ <returns>Cadena de caracteres con el nombre del archivo.</returns>
+</member>
+<member name="M:GestionOSPRERA.General.ChequearBaseDatosMovimientos(System.Int16)">
+ <summary>
+ Función utilizada para chequear la existencia de la base de movimientos
+ </summary>
+ <param name="Ano">Obligatorio. Años al que pertenecen los datos de movimiento.</param>
+ <returns>Valor booleano que indica si existe el archivo de base de datos de movimiento.</returns>
+</member>
+<member name="M:GestionOSPRERA.General.DeterminarCadenaConexionMovimiento(System.Int16)">
+ <summary>
+ Función utilizada para determinar la cadena de conexión del archivo de moviemiento a partir del año
+ </summary>
+ <param name="Ano">bligatorio. Años al que pertenecen los datos de movimiento.</param>
+ <returns>Cadena de caracteres con la cadena de conexión.</returns>
+</member>
+<member name="M:GestionOSPRERA.General.AnosDisponibles">
+ <summary>
+ Functión utilizada para determinar los años disponibles de acuerdo a los archivos de movimientos existentes
+ </summary>
+ <returns>SortList con los años disponibles</returns>
+</member>
+</members>
+</doc>

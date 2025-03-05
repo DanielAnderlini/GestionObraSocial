@@ -1,0 +1,348 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Entidades
+</name>
+</assembly>
+<members>
+<member name="T:Entidades.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:Entidades.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:Entidades.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="P:Entidades.Afiliado.Id">
+ <summary>
+ Propiedad que indica el o la Id
+ </summary>
+ <value>mId valor del tipo Int64.</value>
+ <returns>mId valor del tipo Int64.</returns>
+ <remarks>Propiedad Id.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.CUIL">
+ <summary>
+ Propiedad que indica el o la CUIL
+ </summary>
+ <value>mCUIL valor del tipo Int64.</value>
+ <returns>mCUIL valor del tipo Int64.</returns>
+ <remarks>Propiedad CUIL.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.DNI">
+ <summary>
+ Propiedad que indica el o la DNI
+ </summary>
+ <value>mDNI valor del tipo Int64.</value>
+ <returns>mDNI valor del tipo Int64.</returns>
+ <remarks>Propiedad DNI.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.Apellidos">
+ <summary>
+ Propiedad que indica el o la Apellidos
+ </summary>
+ <value>mApellidos valor del tipo String.</value>
+ <returns>mApellidos valor del tipo String.</returns>
+ <remarks>Propiedad Apellidos.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.Nombres">
+ <summary>
+ Propiedad que indica el o la Nombres
+ </summary>
+ <value>mNombres valor del tipo String.</value>
+ <returns>mNombres valor del tipo String.</returns>
+ <remarks>Propiedad Nombres.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.FechaNacimiento">
+ <summary>
+ Propiedad que indica el o la FechaNacimiento
+ </summary>
+ <value>mFechaNacimiento valor del tipo Date.</value>
+ <returns>mFechaNacimiento valor del tipo Date.</returns>
+ <remarks>Propiedad FechaNacimiento.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.Genero">
+ <summary>
+ Propiedad que indica el o la Genero
+ </summary>
+ <value>mGenero valor del tipo String.</value>
+ <returns>mGenero valor del tipo String.</returns>
+ <remarks>Propiedad Genero.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.CUILT_Titular">
+ <summary>
+ Propiedad que indica el o la CUILT_Titular
+ </summary>
+ <value>mCUILT_Titular valor del tipo Int64.</value>
+ <returns>mCUILT_Titular valor del tipo Int64.</returns>
+ <remarks>Propiedad CUILT_Titular.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.Relacion">
+ <summary>
+ Propiedad que indica el o la Relacion
+ </summary>
+ <value>mRelacion valor del tipo String.</value>
+ <returns>mRelacion valor del tipo String.</returns>
+ <remarks>Propiedad Relacion.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.TipoAfiliado">
+ <summary>
+ Propiedad que indica el o la TipoAfiliado
+ </summary>
+ <value>mTipoAfiliado valor del tipo String.</value>
+ <returns>mTipoAfiliado valor del tipo String.</returns>
+ <remarks>Propiedad TipoAfiliado.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.UATRE">
+ <summary>
+ Propiedad que indica el o la UATRE
+ </summary>
+ <value>mUATRE valor del tipo Boolean.</value>
+ <returns>mUATRE valor del tipo Boolean.</returns>
+ <remarks>Propiedad UATRE.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.Provincia">
+ <summary>
+ Propiedad que indica el o la Provincia
+ </summary>
+ <value>mProvincia valor del tipo String.</value>
+ <returns>mProvincia valor del tipo String.</returns>
+ <remarks>Propiedad Provincia.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.BocaExpendio">
+ <summary>
+ Propiedad que indica el o la BocaExpendio
+ </summary>
+ <value>mBocaExpendio valor del tipo Int64.</value>
+ <returns>mBocaExpendio valor del tipo Int64.</returns>
+ <remarks>Propiedad BocaExpendio.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.Departamento">
+ <summary>
+ Propiedad que indica el o la Departamento
+ </summary>
+ <value>mDepartamento valor del tipo String.</value>
+ <returns>mDepartamento valor del tipo String.</returns>
+ <remarks>Propiedad Departamento.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.Localidad">
+ <summary>
+ Propiedad que indica el o la Localidad
+ </summary>
+ <value>mLocalidad valor del tipo String.</value>
+ <returns>mLocalidad valor del tipo String.</returns>
+ <remarks>Propiedad Localidad.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.Domicilio">
+ <summary>
+ Propiedad que indica el o la Domicilio
+ </summary>
+ <value>mDomicilio valor del tipo String.</value>
+ <returns>mDomicilio valor del tipo String.</returns>
+ <remarks>Propiedad Domicilio.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.Telefono">
+ <summary>
+ Propiedad que indica el o la Telefono
+ </summary>
+ <value>mTelefono valor del tipo String.</value>
+ <returns>mTelefono valor del tipo String.</returns>
+ <remarks>Propiedad Telefono.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.Email">
+ <summary>
+ Propiedad que indica el o la Email
+ </summary>
+ <value>mEmail valor del tipo String.</value>
+ <returns>mEmail valor del tipo String.</returns>
+ <remarks>Propiedad Email.</remarks>
+</member>
+<member name="P:Entidades.Afiliado.TipoCarga">
+ <summary>
+ Propiedad que indica el o la TipoCarga
+ </summary>
+ <value>mTipoCarga valor del tipo String.</value>
+ <returns>mTipoCarga valor del tipo String.</returns>
+ <remarks>Propiedad TipoCarga.</remarks>
+</member>
+<member name="M:Entidades.Afiliado.#ctor">
+ <summary>
+ Procedimiento ejecutado al instanciar la clase
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Entidades.AfiliadoDBF.cuil">
+ <summary>
+ Propiedad que indica el o la cuil
+ </summary>
+ <value>mcuil valor del tipo Int64.</value>
+ <returns>mcuil valor del tipo Int64.</returns>
+ <remarks>Propiedad cuil.</remarks>
+</member>
+<member name="P:Entidades.AfiliadoDBF.tipo">
+ <summary>
+ Propiedad que indica el o la tipo
+ </summary>
+ <value>mtipo valor del tipo Int16.</value>
+ <returns>mtipo valor del tipo Int16.</returns>
+ <remarks>Propiedad tipo.</remarks>
+</member>
+<member name="P:Entidades.AfiliadoDBF.Docu">
+ <summary>
+ Propiedad que indica el o la Docu
+ </summary>
+ <value>mDocu valor del tipo Int64.</value>
+ <returns>mDocu valor del tipo Int64.</returns>
+ <remarks>Propiedad Docu.</remarks>
+</member>
+<member name="P:Entidades.AfiliadoDBF.Secu">
+ <summary>
+ Propiedad que indica el o la Secu
+ </summary>
+ <value>mSecu valor del tipo Int16.</value>
+ <returns>mSecu valor del tipo Int16.</returns>
+ <remarks>Propiedad Secu.</remarks>
+</member>
+<member name="P:Entidades.AfiliadoDBF.Nomb">
+ <summary>
+ Propiedad que indica el o la Nomb
+ </summary>
+ <value>mNomb valor del tipo String.</value>
+ <returns>mNomb valor del tipo String.</returns>
+ <remarks>Propiedad Nomb.</remarks>
+</member>
+<member name="P:Entidades.AfiliadoDBF.Bexp">
+ <summary>
+ Propiedad que indica el o la Bexp
+ </summary>
+ <value>mBexp valor del tipo Int64.</value>
+ <returns>mBexp valor del tipo Int64.</returns>
+ <remarks>Propiedad Bexp.</remarks>
+</member>
+<member name="P:Entidades.AfiliadoDBF.Fnac">
+ <summary>
+ Propiedad que indica el o la Fnac
+ </summary>
+ <value>mFnac valor del tipo Date.</value>
+ <returns>mFnac valor del tipo Date.</returns>
+ <remarks>Propiedad Fnac.</remarks>
+</member>
+<member name="P:Entidades.AfiliadoDBF.Sexo">
+ <summary>
+ Propiedad que indica el o la Sexo
+ </summary>
+ <value>mSexo valor del tipo Char.</value>
+ <returns>mSexo valor del tipo Char.</returns>
+ <remarks>Propiedad Sexo.</remarks>
+</member>
+<member name="P:Entidades.AfiliadoDBF.Orig">
+ <summary>
+ Propiedad que indica el o la Orig
+ </summary>
+ <value>mOrig valor del tipo Char.</value>
+ <returns>mOrig valor del tipo Char.</returns>
+ <remarks>Propiedad Orig.</remarks>
+</member>
+<member name="P:Entidades.AfiliadoDBF.Uatre">
+ <summary>
+ Propiedad que indica el o la Uatre
+ </summary>
+ <value>mUatre valor del tipo Char.</value>
+ <returns>mUatre valor del tipo Char.</returns>
+ <remarks>Propiedad Uatre.</remarks>
+</member>
+<member name="P:Entidades.AfiliadoDBF.Cuif">
+ <summary>
+ Propiedad que indica el o la Cuif
+ </summary>
+ <value>mCuif valor del tipo Int64.</value>
+ <returns>mCuif valor del tipo Int64.</returns>
+ <remarks>Propiedad Cuif.</remarks>
+</member>
+<member name="P:Entidades.AfiliadoDBF.Cond">
+ <summary>
+ Propiedad que indica el o la Cond
+ </summary>
+ <value>mCond valor del tipo String.</value>
+ <returns>mCond valor del tipo String.</returns>
+ <remarks>Propiedad Cond.</remarks>
+</member>
+<member name="M:Entidades.AfiliadoDBF.#ctor">
+ <summary>
+ Procedimiento ejecutado al instanciar la clase
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Entidades.CondicionAfiliatoria.Id">
+ <summary>
+ Propiedad que indica el o la Id
+ </summary>
+ <value>mId valor del tipo Int64.</value>
+ <returns>mId valor del tipo Int64.</returns>
+ <remarks>Propiedad Id.</remarks>
+</member>
+<member name="P:Entidades.CondicionAfiliatoria.Mes">
+ <summary>
+ Propiedad que indica el o la Mes
+ </summary>
+ <value>mMes valor del tipo Int16.</value>
+ <returns>mMes valor del tipo Int16.</returns>
+ <remarks>Propiedad Mes.</remarks>
+</member>
+<member name="P:Entidades.CondicionAfiliatoria.Id_Afiliado">
+ <summary>
+ Propiedad que indica el o la Id_Afiliado
+ </summary>
+ <value>mId_Afiliado valor del tipo Int64.</value>
+ <returns>mId_Afiliado valor del tipo Int64.</returns>
+ <remarks>Propiedad Id_Afiliado.</remarks>
+</member>
+<member name="P:Entidades.CondicionAfiliatoria.CUIL">
+ <summary>
+ Propiedad que indica el o la CUIL
+ </summary>
+ <value>mCUIL valor del tipo Int64.</value>
+ <returns>mCUIL valor del tipo Int64.</returns>
+ <remarks>Propiedad CUIL.</remarks>
+</member>
+<member name="P:Entidades.CondicionAfiliatoria.DNI">
+ <summary>
+ Propiedad que indica el o la DNI
+ </summary>
+ <value>mDNI valor del tipo Int64.</value>
+ <returns>mDNI valor del tipo Int64.</returns>
+ <remarks>Propiedad DNI.</remarks>
+</member>
+<member name="P:Entidades.CondicionAfiliatoria.CUIL_Titular">
+ <summary>
+ Propiedad que indica el o la CUIL_Titular
+ </summary>
+ <value>mCUIL_Titular valor del tipo Int64.</value>
+ <returns>mCUIL_Titular valor del tipo Int64.</returns>
+ <remarks>Propiedad CUIL_Titular.</remarks>
+</member>
+<member name="P:Entidades.CondicionAfiliatoria.TipoCondicion">
+ <summary>
+ Propiedad que indica el o la TipoCondicion
+ </summary>
+ <value>mTipoCondicion valor del tipo String.</value>
+ <returns>mTipoCondicion valor del tipo String.</returns>
+ <remarks>Propiedad TipoCondicion.</remarks>
+</member>
+<member name="M:Entidades.CondicionAfiliatoria.#ctor">
+ <summary>
+ Procedimiento ejecutado al instanciar la clase
+ </summary>
+ <remarks></remarks>
+</member>
+</members>
+</doc>
