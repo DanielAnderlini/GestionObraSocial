@@ -1,0 +1,287 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+CapaDatos
+</name>
+</assembly>
+<members>
+<member name="T:CapaDatos.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:CapaDatos.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:CapaDatos.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="M:CapaDatos.Afiliados.AltaOLEDB(System.String,Entidades.Afiliado)">
+ <summary>
+ Función utilizada para dar de alta un afiliado
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="ObraSocial">Obligatorio. Objeto de la clase "ObraSocial", con todos los atributos necesarios para dar de alta el nuevo dato básico.</param>
+ <returns>Valor entero de 64 bits, con el nuevo número identificador asignado.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.Afiliados.AltaColeccionOLEDB(System.String,Entidades.Afiliados)">
+ <summary>
+ Función utilizada para dar de alta una colección de afiliados
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="Afiliados">Obligatorio. Colección de objetos de la clase "ObraSocial", con todos los atributos necesarios para dar de alta el nuevo dato básico.</param>
+ <returns>Valor entero de 64 bits, con el nuevo número identificador asignado.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.Afiliados.BajaOLEDB(System.String,System.Int64)">
+ <summary>
+ Procedimiento utilizado para dar de baja un afiliado
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="Id">Obligatorio. Número identificador del afiliado a eliminar.</param>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.Afiliados.ModificacionOLEDB(System.String,Entidades.Afiliado)">
+ <summary>
+ Procedimiento utilizado para modificar un afiliado
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="Afiliado">Obligatorio. Objeto de la clase "Afiliado", con todos los atributos necesarios para modificar el dato general.</param>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.Afiliados.ConsultaIdentificadorOLEDB(System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar un afiliado según su atributo "Id"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="Id">Obligatorio. Número identificador del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "ObraSocial".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.Afiliados.ConsultaCUILOLEDB(System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar un afiliado según su atributo "CUIL"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="CUIL">Obligatorio. CUIL del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.Afiliados.ConsultaDNIOLEDB(System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar un afiliado según su atributo "DNI"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="DNI">Obligatorio. DNI del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.Afiliados.ConsultaCUILDNIOLEDB(System.String,System.Int64,System.Int64)">
+ <summary>
+ Función utilizada para buscar un afiliado según sus atributos "CUIL" y "DNI"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="CUIL">Obligatorio. CUIL del afiliado a buscar.</param>
+ <param name="DNI">Obligatorio. DNI del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.Afiliados.ConsultaCUIL_TitularDNIOLEDB(System.String,System.Int64,System.Int64)">
+ <summary>
+ Función utilizada para buscar un afiliado según sus atributos "CUIL_Titular" y "DNI"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="CUIL_Titular">Obligatorio. CUIL del titular del grupo familiar a buscar.</param>
+ <param name="DNI">Obligatorio. DNI del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.Afiliados.ConsultaGeneroOLEDB(System.String,System.String)">
+ <summary>
+ Función utilizada para buscar un afiliado según su atributo "Genero"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="Genero">Obligatorio. Genero del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.Afiliados.ConsultaRelacionOLEDB(System.String,System.String)">
+ <summary>
+ Función utilizada para buscar un afiliado según su atributo "Relacion"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="Relacion">Obligatorio. Relacion del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.Afiliados.ConsultaTipoAfiliadoOLEDB(System.String,System.String)">
+ <summary>
+ Función utilizada para buscar un afiliado según su atributo "TipoAfiliado"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoAfiliado">Obligatorio. Relacion del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.Afiliados.ConsultaGrupoFamiliarLEDB(System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar el grupo familiar según su atributo "CUIL_Titular"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="CUIL_Titular">Obligatorio. CUIL del titular del grupo familiar a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.Afiliados.ConsultaProvinciaOLEDB(System.String,System.String)">
+ <summary>
+ Función utilizada para buscar un afiliado según su atributo "Provincia"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="Provincia">Obligatorio. Relacion del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.Afiliados.ConsultaBocaExpendioOLEDB(System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar un afiliado según su atributo "BocaExpendio"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="BocaExpendio">Obligatorio. BocaExpendio del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.Afiliados.ConsultaDistintasBocasExpendioOLEDB(System.String,System.String)">
+ <summary>
+ Función utilizada para buscar las distintas bocas de expendio
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="Provincia">Obligatorio. Proviencia a la que pertenece la bocaExpendio del afiliado a buscar.</param>
+ <returns>Lista de cadenas de caracteres con las distintias bocas de expendio.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.Afiliados.ConsultaDistintasProvinciasOLEDB(System.String)">
+ <summary>
+ Función utilizada para buscar las distintas provincias
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <returns>Lista de cadenas de caracteres con las distintias provincias.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.AfiliadosDBF.ConsultaTodosOLEDB(System.String)">
+ <summary>
+ Función utilizada para buscar un todos los pacientes
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <returns>Colección de objetos de la clase "Paciente".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.AfiliadosDBF.ConsultaProvinciaOLEDB(System.String,System.Int16)">
+ <summary>
+ Función utilizada para buscar un todos los afiliados de una provincia
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="CodigoProvincia">Obligatorio. Número de provincia por la cual se quiere filtrar.</param>
+ <returns>Colección de objetos de la clase "Paciente".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.CondicionesAfiliatorias.AltaOLEDB(System.String,Entidades.CondicionAfiliatoria)">
+ <summary>
+ Función utilizada para dar de alta una condición afiliatoria
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="CondicionAfiliatoria">Obligatorio. Objeto de la clase "CondicionAfiliatoria", con todos los atributos necesarios para dar de alta el nuevo dato básico.</param>
+ <returns>Valor entero de 64 bits, con el nuevo número identificador asignado.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.CondicionesAfiliatorias.BajaOLEDB(System.String,System.Int64)">
+ <summary>
+ Procedimiento utilizado para dar de baja una condición afiliatoria
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="Id">Obligatorio. Número identificador del afiliado a eliminar.</param>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.CondicionesAfiliatorias.ModificacionOLEDB(System.String,Entidades.CondicionAfiliatoria)">
+ <summary>
+ Procedimiento utilizado para modificar una condición afiliatoria
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="CondicionAfiliatoria">Obligatorio. Objeto de la clase "CondicionAfiliatoria", con todos los atributos necesarios para modificar el dato general.</param>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.CondicionesAfiliatorias.ConsultaIdentificadorOLEDB(System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar una condición afiliatoria según su atributo "Id"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="Id">Obligatorio. Número identificador de la condición afiliatoria a buscar.</param>
+ <returns>Colección de objetos de la clase "CondicionAfiliatoria".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.CondicionesAfiliatorias.ConsultaAfiliadoOLEDB(System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar una condición afiliatoria según su atributo "Id_Afiliado"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="Id_Afiliado">Obligatorio. Número identificador del afiliado relacionado a la condición afiliatoria a buscar.</param>
+ <returns>Colección de objetos de la clase "CondicionAfiliatoria".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.CondicionesAfiliatorias.ConsultaCUILOLEDB(System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar un afiliado según su atributo "CUIL"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="CUIL">Obligatorio. CUIL del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.CondicionesAfiliatorias.ConsultaDNIOLEDB(System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar una condición afiliatoria según su atributo "DNI"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="DNI">Obligatorio. DNI del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "CondicionAfiliatoria".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.CondicionesAfiliatorias.ConsultaCUIL_TitularDNIOLEDB(System.String,System.Int64,System.Int64)">
+ <summary>
+ Función utilizada para buscar una condición afiliatoria según sus atributos "CUIL_Titular" y "DNI"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="CUIL_Titular">Obligatorio. CUIL del titular a buscar.</param>
+ <param name="DNI">Obligatorio. DNI del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "CondicionAfiliatoria".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.CondicionesAfiliatorias.ConsultaCUIL_TitularDNIMesesOLEDB(System.String,System.Int64,System.Int64,System.Int16,System.Int16)">
+ <summary>
+ Función utilizada para buscar una condición afiliatoria según sus atributos "CUIL_Titular", "DNI", "Mes"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="CUIL_Titular">Obligatorio. CUIL del titular a buscar.</param>
+ <param name="DNI">Obligatorio. DNI del afiliado a buscar.</param>
+ <param name="Mes_Desde">Obligatorio. Mes sobre el cual se desea consultar.</param>
+ <param name="Mes_Hasta">Opcional. Mes hasta el cual se desea consultar. Por defecto es cero.</param>
+ <returns>Colección de objetos de la clase "CondicionAfiliatoria".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaDatos.CondicionesAfiliatorias.ConsultaMesOLEDB(System.String,System.Int16)">
+ <summary>
+ Función utilizada para buscar las condiciones afiliatorias según su atributo "Mes"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="Mes">Obligatorio. Mes de las condiciones afiliatoria a buscar.</param>
+ <returns>Colección de objetos de la clase "CondicionAfiliatoria".</returns>
+ <remarks></remarks>
+</member>
+</members>
+</doc>

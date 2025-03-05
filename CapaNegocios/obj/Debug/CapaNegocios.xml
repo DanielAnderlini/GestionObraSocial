@@ -1,0 +1,310 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+CapaNegocios
+</name>
+</assembly>
+<members>
+<member name="M:CapaNegocios.Afiliados.Alta(System.String,System.String,Entidades.Afiliado)">
+ <summary>
+ Función utilizada para dar de alta un afiliado
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="Afiliado">Obligatorio. Objeto de la clase "Afiliado", con todos los atributos necesarios para dar de alta el nuevo dato general.</param>
+ <returns>Valor entero de 64 bits, con el nuevo número identificador asignado.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.Afiliados.AltaColeccion(System.String,System.String,Entidades.Afiliados)">
+ <summary>
+ Función utilizada para dar de alta un afiliado
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="Afiliados">Obligatorio. Colección de objetos de la clase "Afiliado", con todos los atributos necesarios para dar de alta el nuevo dato general.</param>
+ <returns>Valor entero de 64 bits, con el nuevo número identificador asignado.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.Afiliados.Baja(System.String,System.String,System.Int64)">
+ <summary>
+ Procedimiento utilizado para dar de baja un afiliado
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="Id">Obligatorio. Número identificador del afiliado a eliminar.</param>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.Afiliados.Modificar(System.String,System.String,Entidades.Afiliado)">
+ <summary>
+ Procedimiento utilizado para modificar un afiliado existente
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="Afiliado">Obligatorio. Objeto de la clase "Afiliado", con todos los atributos necesarios para modificar el dato general.</param>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.Afiliados.ConsultaIdentificador(System.String,System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar un afiliado según su atributo "Id"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="Id">Obligatorio. Número identificador del profesional a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.Afiliados.ConsultaCUIL(System.String,System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar un afiliado según su atributo "CUIL"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="CUIL">Obligatorio. Número identificador del profesional a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.Afiliados.ConsultaDNI(System.String,System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar un afiliado según su atributo "DNI"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="DNI">Obligatorio. Número identificador del profesional a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.Afiliados.ConsultaCUILDNI(System.String,System.String,System.Int64,System.Int64)">
+ <summary>
+ Función utilizada para buscar un afiliado según sus atributos "CUIL" y "DNI"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="CUIL">Obligatorio. Número identificador del profesional a buscar.</param>
+ <param name="DNI">Obligatorio. Documento del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.Afiliados.ConsultaCUIL_TitularDNI(System.String,System.String,System.Int64,System.Int64)">
+ <summary>
+ Función utilizada para buscar un afiliado según sus atributos "CUIL_Titular" y "DNI"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="CUIL_Titular">Obligatorio. Número identificador del profesional a buscar.</param>
+ <param name="DNI">Obligatorio. Documento del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.Afiliados.ConsultaGenero(System.String,System.String,System.String)">
+ <summary>
+ Función utilizada para buscar un afiliado según su atributo "Genero"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="Genero">Obligatorio. Genero del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.Afiliados.ConsultaRelacion(System.String,System.String,System.String)">
+ <summary>
+ Función utilizada para buscar un afiliado según su atributo "Relacion"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="Relacion">Obligatorio. Relación del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.Afiliados.ConsultaGrupoFamiliar(System.String,System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar el grupo familiar según su atributo "CUIL_Titular"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="CUIL_Titular">Obligatorio. Número identificador del profesional a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.Afiliados.ConsultaTipoAfiliado(System.String,System.String,System.String)">
+ <summary>
+ Función utilizada para buscar un afiliado según su atributo "TipoAfiliado"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="TipoAfiliado">Obligatorio. Relación del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.Afiliados.ConsultaProvincia(System.String,System.String,System.String)">
+ <summary>
+ Función utilizada para buscar un afiliado según su atributo "Provincia"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="Provincia">Obligatorio. Provincia del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.Afiliados.ConsultaBocaExpendio(System.String,System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar un afiliado según su atributo "BocaExpendio"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="BocaExpendio">Obligatorio. Número de boca de expendio del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "Afiliado".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.Afiliados.ConsultaDistintasBocasExpendio(System.String,System.String,System.String)">
+ <summary>
+ Función utilizada para buscar las distintas bocas de expendio
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="Provincia">Obligatorio. Provincia a las que pertenecen las bocas de expendio.</param>
+ <returns>Lista de cadenas de caracteres con las distintias bocas de expendio.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.Afiliados.ConsultaDistintasProvincias(System.String,System.String)">
+ <summary>
+ Función utilizada para buscar las distintas provincias
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <returns>Lista de cadenas de caracteres con las distintias provincias.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.Afiliados.Validar(System.String,System.String,Entidades.Afiliado,System.Boolean)">
+ <summary>
+ Procedimiento utilizado para validar los datos de un afiliado
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="Afiliado">Obligatorio. Objeto de la clase "Practica", con todos los atributos necesarios para ser validado.</param>
+ <param name="Alta">Opcional. Valor booleano que indica</param>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.AfiliadosDBF.ConsultaTodos(System.String,System.String)">
+ <summary>
+ Función utilizada para consultar un todas los afiliados
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <returns>Colección de objetos de la clase "AfiliadoDBF".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.CondicionesAfiliatorias.Alta(System.String,System.String,Entidades.CondicionAfiliatoria)">
+ <summary>
+ Función utilizada para dar de alta una condición afiliatoria
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="CondicionAfiliatoria">Obligatorio. Objeto de la clase "CondicionAfiliatoria", con todos los atributos necesarios para dar de alta el nuevo dato general.</param>
+ <returns>Valor entero de 64 bits, con el nuevo número identificador asignado.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.CondicionesAfiliatorias.Baja(System.String,System.String,System.Int64)">
+ <summary>
+ Procedimiento utilizado para dar de baja una condición afiliatoria
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="Id">Obligatorio. Número identificador de la condición afiliatoria a eliminar.</param>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.CondicionesAfiliatorias.Modificar(System.String,System.String,Entidades.CondicionAfiliatoria)">
+ <summary>
+ Procedimiento utilizado para modificar una condición afiliatoria existente
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="CondicionAfiliatoria">Obligatorio. Objeto de la clase "CondicionAfiliatoria", con todos los atributos necesarios para modificar el dato general.</param>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.CondicionesAfiliatorias.ConsultaIdentificador(System.String,System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar una condición afiliatoria según su atributo "Id"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="Id">Obligatorio. Número identificador de la condición afiliatoria a buscar.</param>
+ <returns>Colección de objetos de la clase "CondicionAfiliatoria".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.CondicionesAfiliatorias.ConsultaAfiliado(System.String,System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar una condición afiliatoria según su atributo "Id_Afiliado"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="Id_Afiliado">Obligatorio. Número identificador del afiliado relacionado a la condición afiliatoria a buscar.</param>
+ <returns>Colección de objetos de la clase "CondicionAfiliatoria".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.CondicionesAfiliatorias.ConsultaCUIL(System.String,System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar una condición afiliatoria según su atributo "CUIL"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="CUIL">Obligatorio. CUIL del afiliado con la condición afiliatoria a buscar.</param>
+ <returns>Colección de objetos de la clase "CondicionAfiliatoria".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.CondicionesAfiliatorias.ConsultaDNI(System.String,System.String,System.Int64)">
+ <summary>
+ Función utilizada para buscar una condición afiliatoria según su atributo "DNI"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="DNI">Obligatorio. DNI del afiliado de la condición afiliatoria a buscar.</param>
+ <returns>Colección de objetos de la clase "CondicionAfiliatoria".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.CondicionesAfiliatorias.ConsultaCUIL_TitularDNI(System.String,System.String,System.Int64,System.Int64)">
+ <summary>
+ Función utilizada para buscar un afiliado según sus atributos "CUIL_Titular" y "DNI"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="CUIL_Titular">Obligatorio. CUIL del titular de la condición afiliatoria a buscar.</param>
+ <param name="DNI">Obligatorio. Documento del afiliado a buscar.</param>
+ <returns>Colección de objetos de la clase "CondicionAfiliatoria".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.CondicionesAfiliatorias.ConsultaCUIL_TitularDNIMeses(System.String,System.String,System.Int64,System.Int64,System.Int16,System.Int16)">
+ <summary>
+ Función utilizada para buscar una condición afiliatoria según sus atributos "CUIL_Titular", "DNI", "Mes"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="CUIL_Titular">Obligatorio. CUIL del titular de la condición afiliatoria a buscar.</param>
+ <param name="DNI">Obligatorio. Documento del afiliado a buscar.</param>
+ <param name="Mes_Desde">Obligatorio. Mes sobre el cual se desea consultar.</param>
+ <param name="Mes_Hasta">Opcional. Mes hasta el cual se desea consultar. Por defecto es cero.</param>
+ <returns>Colección de objetos de la clase "CondicionAfiliatoria".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.CondicionesAfiliatorias.ConsultaMesOLEDB(System.String,System.String,System.Int16)">
+ <summary>
+ Función utilizada para buscar las condiciones afiliatorias según su atributo "Mes"
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="Mes">Obligatorio. Mes de las condiciones afiliatoria a buscar.</param>
+ <returns>Colección de objetos de la clase "CondicionAfiliatoria".</returns>
+ <remarks></remarks>
+</member>
+<member name="M:CapaNegocios.CondicionesAfiliatorias.Validar(System.String,System.String,Entidades.CondicionAfiliatoria,System.Boolean)">
+ <summary>
+ Procedimiento utilizado para validar los datos de una condición afiliatoria
+ </summary>
+ <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+ <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
+ <param name="CondicionAfiliatoria">Obligatorio. Objeto de la clase "CondicionAfiliatoria", con todos los atributos necesarios para ser validado.</param>
+ <param name="Alta">Opcional. Valor booleano que indica</param>
+ <remarks></remarks>
+</member>
+</members>
+</doc>

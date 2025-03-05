@@ -1,0 +1,17 @@
+D:\DFA\Proyectos OSPRERA\GestionOSPRERA\CapaNegocios\bin\Debug\CapaNegocios.dll
+D:\DFA\Proyectos OSPRERA\GestionOSPRERA\CapaNegocios\bin\Debug\CapaNegocios.pdb
+D:\DFA\Proyectos OSPRERA\GestionOSPRERA\CapaNegocios\bin\Debug\CapaNegocios.xml
+D:\DFA\Proyectos OSPRERA\GestionOSPRERA\CapaNegocios\bin\Debug\CapaDatos.dll
+D:\DFA\Proyectos OSPRERA\GestionOSPRERA\CapaNegocios\bin\Debug\Entidades.dll
+D:\DFA\Proyectos OSPRERA\GestionOSPRERA\CapaNegocios\bin\Debug\CapaDatos.pdb
+D:\DFA\Proyectos OSPRERA\GestionOSPRERA\CapaNegocios\bin\Debug\CapaDatos.xml
+D:\DFA\Proyectos OSPRERA\GestionOSPRERA\CapaNegocios\bin\Debug\Entidades.pdb
+D:\DFA\Proyectos OSPRERA\GestionOSPRERA\CapaNegocios\bin\Debug\Entidades.xml
+D:\DFA\Proyectos OSPRERA\GestionOSPRERA\CapaNegocios\obj\Debug\CapaNegocios.vbproj.AssemblyReference.cache
+D:\DFA\Proyectos OSPRERA\GestionOSPRERA\CapaNegocios\obj\Debug\CapaNegocios.Resources.resources
+D:\DFA\Proyectos OSPRERA\GestionOSPRERA\CapaNegocios\obj\Debug\CapaNegocios.vbproj.GenerateResource.cache
+D:\DFA\Proyectos OSPRERA\GestionOSPRERA\CapaNegocios\obj\Debug\CapaNegocios.vbproj.CoreCompileInputs.cache
+D:\DFA\Proyectos OSPRERA\GestionOSPRERA\CapaNegocios\obj\Debug\CapaNego.4A8109B1.Up2Date
+D:\DFA\Proyectos OSPRERA\GestionOSPRERA\CapaNegocios\obj\Debug\CapaNegocios.dll
+D:\DFA\Proyectos OSPRERA\GestionOSPRERA\CapaNegocios\obj\Debug\CapaNegocios.xml
+D:\DFA\Proyectos OSPRERA\GestionOSPRERA\CapaNegocios\obj\Debug\CapaNegocios.pdb
