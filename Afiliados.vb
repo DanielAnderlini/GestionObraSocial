@@ -1,83 +1,174 @@
 ﻿'***********************************************************************************************
 '*
 '*  Clase: Afiliados
-'*  Capa: Negocios
+'*  Capa: Datos
 '*  Autor: Daniel Fernando Anderlini
-'*  Fecha de creación: 17/02/2025
-'*  Descripción: Clase utilizada para contener toda la lógica del sistema y sirve como interface
-'*               con la capa de datos.
+'*  Fecha de creación: 14/02/2025
+'*  Descripción: Clase utilizada para realizar todas la acciones necesarias sobre la base de datos
+'*               las base de datos.
 '*
 '***********************************************************************************************
+Imports System.Data
+Imports System.Data.SqlClient
+Imports System.Data.OleDb
+Imports Entidades
 Public Class Afiliados
 
-#Region "Métodos públicos"
+#Region "Métodos públicos relacionados a OLEDB"
 
     ''' <summary>
     ''' Función utilizada para dar de alta un afiliado
     ''' </summary>
     ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
-    ''' <param name="Afiliado">Obligatorio. Objeto de la clase "Afiliado", con todos los atributos necesarios para dar de alta el nuevo dato general.</param>
+    ''' <param name="ObraSocial">Obligatorio. Objeto de la clase "ObraSocial", con todos los atributos necesarios para dar de alta el nuevo dato básico.</param>
     ''' <returns>Valor entero de 64 bits, con el nuevo número identificador asignado.</returns>
     ''' <remarks></remarks>
-    Public Function Alta(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String, ByVal Afiliado As Entidades.Afiliado) As Int64
+    Public Function AltaOLEDB(ByVal CadenaConexion As String, ByVal ObraSocial As Entidades.Afiliado) As Int64
         Dim Valor As Int64 = 0
-        'Evalúa con que tipo de base de datos se esta trabajando
-        Select Case TipoBaseDatos.ToUpper.Trim
-            Case "SQL"
-
-            Case "OLEDB"
-                Dim CapaDatos As New CapaDatos.Afiliados
-                Try
-                    'Ejecuta acciones sobre la capa de datos
-                    Valor = CapaDatos.AltaOLEDB(CadenaConexion, Afiliado)
-                Catch ex As Exception
-                    'Genera el nuevo error
-                    Throw New ArgumentException(ex.Message)
-                Finally
-                    'Libera el objeto utilizado 
-                    CapaDatos = Nothing
-                End Try
-            Case "MYSQL"
-
-            Case "SQLCE"
-
-        End Select
+        Dim ConBD As New OleDbConnection
+        Dim Cmd As New OleDbCommand
+        Dim CadenaCmd As String = "Insert into Afiliados (CUIL, DNI, Apellidos, Nombres, FechaNacimiento, Genero, CUIL_Titular, Relacion, TipoAfiliado, UATRE, Provincia, BocaExpendio, Departamento, Localidad, Domicilio, Telefono, Email, TipoCarga) values ("
+        Dim CadenaCategorias As String = ""
+        Dim CadenaMsg As String = vbCrLf & vbCrLf & "   Capa: Datos." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: AltaOLEDB."
+        Try
+            'Define la cadena de conexión aplicada a la conexión
+            ConBD.ConnectionString = CadenaConexion
+            'Abre la conexión
+            ConBD.Open()
+            Try
+                'Asigna la conexión abierta al comando instanciado
+                Cmd.Connection = ConBD
+                'Define el tipo de comando a ejecutar
+                With ObraSocial
+                    CadenaCmd &= .CUIL.ToString.Trim & ", "
+                    CadenaCmd &= .DNI.ToString.Trim & ", "
+                    CadenaCmd &= "'" & .Apellidos.Trim.ToUpper & "', "
+                    CadenaCmd &= "'" & .Nombres.Trim.ToUpper & "', "
+                    CadenaCmd &= "DateValue('" & .FechaNacimiento.ToShortDateString.Trim.ToUpper & "'), "
+                    CadenaCmd &= "'" & .Genero.Trim.ToUpper & "', "
+                    CadenaCmd &= .CUILT_Titular.ToString.Trim & ", "
+                    CadenaCmd &= "'" & .Relacion.Trim.ToUpper & "', "
+                    CadenaCmd &= "'" & .TipoAfiliado.Trim.ToUpper & "', "
+                    CadenaCmd &= .UATRE.ToString.Trim & ", "
+                    CadenaCmd &= "'" & .Provincia.Trim.ToUpper & "', "
+                    CadenaCmd &= .BocaExpendio.ToString.Trim & ", "
+                    CadenaCmd &= "'" & .Departamento.Trim.ToUpper & "', "
+                    CadenaCmd &= "'" & .Localidad.Trim.ToUpper & "', "
+                    CadenaCmd &= "'" & .Domicilio.Trim.ToUpper & "', "
+                    CadenaCmd &= "'" & .Telefono.Trim.ToUpper & "', "
+                    CadenaCmd &= "'" & .Email.Trim.ToUpper & "', "
+                    CadenaCmd &= "'" & .TipoCarga & "')"
+                End With
+                Cmd.CommandType = CommandType.Text
+                'Define el comando
+                Cmd.CommandText = CadenaCmd
+                'Ejecuta la consulta
+                Call Cmd.ExecuteScalar()
+                'Determina el nuevo número de Id.
+                CadenaCmd = "Select Max(Id) from Afiliados"
+                Cmd.CommandText = CadenaCmd
+                Valor = Cmd.ExecuteScalar
+            Catch ex As Exception
+                'Defineción del mensaje de error
+                CadenaMsg = ex.Message & CadenaMsg
+                'Genera un nuevo tipo de mensaje de error
+                Throw New ArgumentException(CadenaMsg)
+            End Try
+        Catch ex As Exception
+            'Copia la cadena de conexión y la de comandos al portapapeles
+            My.Computer.Clipboard.SetText(CadenaConexion & vbCrLf & CadenaCmd)
+            'Defineción del mensaje de error
+            CadenaMsg = ex.Message & CadenaMsg
+            'Genera un nuevo tipo de mensaje de error
+            Throw New ArgumentException(CadenaMsg)
+        Finally
+            'Cierra la conexión
+            ConBD.Close()
+            'Liberación de objetos utilizados
+            ConBD = Nothing
+            Cmd = Nothing
+        End Try
         'Valor de retorno de la función
         Return Valor
     End Function
 
     ''' <summary>
-    ''' Función utilizada para dar de alta un afiliado
+    ''' Función utilizada para dar de alta una colección de afiliados
     ''' </summary>
     ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
-    ''' <param name="Afiliados">Obligatorio. Colección de objetos de la clase "Afiliado", con todos los atributos necesarios para dar de alta el nuevo dato general.</param>
+    ''' <param name="Afiliados">Obligatorio. Colección de objetos de la clase "ObraSocial", con todos los atributos necesarios para dar de alta el nuevo dato básico.</param>
     ''' <returns>Valor entero de 64 bits, con el nuevo número identificador asignado.</returns>
     ''' <remarks></remarks>
-    Public Function AltaColeccion(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String, ByVal Afiliados As Entidades.Afiliados) As Int64
+    Public Function AltaColeccionOLEDB(ByVal CadenaConexion As String, ByVal Afiliados As Entidades.Afiliados) As Int64
         Dim Valor As Int64 = 0
-        'Evalúa con que tipo de base de datos se esta trabajando
-        Select Case TipoBaseDatos.ToUpper.Trim
-            Case "SQL"
-
-            Case "OLEDB"
-                Dim CapaDatos As New CapaDatos.Afiliados
-                Try
-                    'Ejecuta acciones sobre la capa de datos
-                    Valor = CapaDatos.AltaColeccionOLEDB(CadenaConexion, Afiliados)
-                Catch ex As Exception
-                    'Genera el nuevo error
-                    Throw New ArgumentException(ex.Message)
-                Finally
-                    'Libera el objeto utilizado 
-                    CapaDatos = Nothing
-                End Try
-            Case "MYSQL"
-
-            Case "SQLCE"
-
-        End Select
+        Dim ConBD As New OleDbConnection
+        Dim Cmd As New OleDbCommand
+        Dim CadenaCmd As String = "Insert into Afiliados (CUIL, DNI, Apellidos, Nombres, FechaNacimiento, Genero, CUIL_Titular, Relacion, TipoAfiliado, UATRE, Provincia, BocaExpendio, Departamento, Localidad, Domicilio, Telefono, Email, TipoCarga) values ("
+        Dim CadenaCategorias As String = ""
+        Dim CadenaMsg As String = vbCrLf & vbCrLf & "   Capa: Datos." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: AltaColeccionOLEDB."
+        Dim contador As Int64 = 0
+        Try
+            'Define la cadena de conexión aplicada a la conexión
+            ConBD.ConnectionString = CadenaConexion
+            'Abre la conexión
+            ConBD.Open()
+            Try
+                'Asigna la conexión abierta al comando instanciado
+                Cmd.Connection = ConBD
+                'Recorrido secuencial por la colección de afiliados
+                For Each afiliado As Entidades.Afiliado In Afiliados
+                    'Incrementa el contador
+                    contador += 1
+                    My.Computer.Clipboard.SetText("Procesando registro N°" & contador.ToString.Trim)
+                    'Inicializa la cadena con las instrucciones
+                    CadenaCmd = "Insert into Afiliados (CUIL, DNI, Apellidos, Nombres, FechaNacimiento, Genero, CUIL_Titular, Relacion, TipoAfiliado, UATRE, Provincia, BocaExpendio, Departamento, Localidad, Domicilio, Telefono, Email, TipoCarga) values ("
+                    'Define el tipo de comando a ejecutar
+                    With afiliado
+                        CadenaCmd &= .CUIL.ToString.Trim & ", "
+                        CadenaCmd &= .DNI.ToString.Trim & ", "
+                        CadenaCmd &= "'" & .Apellidos.Trim.ToUpper & "', "
+                        CadenaCmd &= "'" & .Nombres.Trim.ToUpper & "', "
+                        CadenaCmd &= "DateValue('" & .FechaNacimiento.ToShortDateString.Trim.ToUpper & "'), "
+                        CadenaCmd &= "'" & .Genero.Trim.ToUpper & "', "
+                        CadenaCmd &= .CUILT_Titular.ToString.Trim & ", "
+                        CadenaCmd &= "'" & .Relacion.Trim.ToUpper & "', "
+                        CadenaCmd &= "'" & .TipoAfiliado.Trim.ToUpper & "', "
+                        CadenaCmd &= .UATRE.ToString.Trim & ", "
+                        CadenaCmd &= "'" & .Provincia.Trim.ToUpper & "', "
+                        CadenaCmd &= .BocaExpendio.ToString.Trim & ", "
+                        CadenaCmd &= "'" & .Departamento.Trim.ToUpper & "', "
+                        CadenaCmd &= "'" & .Localidad.Trim.ToUpper & "', "
+                        CadenaCmd &= "'" & .Domicilio.Trim.ToUpper & "', "
+                        CadenaCmd &= "'" & .Telefono.Trim.ToUpper & "', "
+                        CadenaCmd &= "'" & .Email.Trim.ToUpper & "', "
+                        CadenaCmd &= "'" & .TipoCarga & "')"
+                    End With
+                    Cmd.CommandType = CommandType.Text
+                    'Define el comando
+                    Cmd.CommandText = CadenaCmd
+                    'Ejecuta la consulta
+                    Call Cmd.ExecuteScalar()
+                Next
+            Catch ex As Exception
+                'Defineción del mensaje de error
+                CadenaMsg = ex.Message & CadenaMsg
+                'Genera un nuevo tipo de mensaje de error
+                Throw New ArgumentException(CadenaMsg)
+            End Try
+        Catch ex As Exception
+            'Copia la cadena de conexión y la de comandos al portapapeles
+            My.Computer.Clipboard.SetText(CadenaConexion & vbCrLf & CadenaCmd)
+            'Defineción del mensaje de error
+            CadenaMsg = ex.Message & CadenaMsg
+            'Genera un nuevo tipo de mensaje de error
+            Throw New ArgumentException(CadenaMsg)
+        Finally
+            'Cierra la conexión
+            ConBD.Close()
+            'Liberación de objetos utilizados
+            ConBD = Nothing
+            Cmd = Nothing
+        End Try
         'Valor de retorno de la función
         Return Valor
     End Function
@@ -86,96 +177,179 @@ Public Class Afiliados
     ''' Procedimiento utilizado para dar de baja un afiliado
     ''' </summary>
     ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
     ''' <param name="Id">Obligatorio. Número identificador del afiliado a eliminar.</param>
     ''' <remarks></remarks>
-    Public Sub Baja(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String, ByVal Id As Int64)
-        'Evalúa con que tipo de base de datos se esta trabajando
-        Select Case TipoBaseDatos.ToUpper.Trim
-            Case "SQL"
-
-            Case "OLEDB"
-                Dim CapaDatos As New CapaDatos.Afiliados
-                Try
-                    'Ejecuta acciones sobre la capa de datos
-                    Call CapaDatos.BajaOLEDB(CadenaConexion, Id)
-                Catch ex As Exception
-                    'Genera el nuevo error
-                    Throw New ArgumentException(ex.Message)
-                Finally
-                    'Libera el objeto utilizado 
-                    CapaDatos = Nothing
-                End Try
-            Case "MYSQL"
-
-            Case "SQLCE"
-
-        End Select
-
+    Public Sub BajaOLEDB(ByVal CadenaConexion As String, ByVal Id As Int64)
+        Dim ConBD As New OleDbConnection
+        Dim Cmd As New OleDbCommand
+        Dim CadenaCmd As String = "Delete from Afiliados Where "
+        Dim CadenaMsg As String = vbCrLf & vbCrLf & "   Capa: Datos." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: BajaOLEDB."
+        Try
+            'Define la cadena de conexión aplicada a la conexión
+            ConBD.ConnectionString = CadenaConexion
+            'Abre la conexión
+            ConBD.Open()
+            'Asigna la conexión abierta al comando instanciado
+            Cmd.Connection = ConBD
+            'Define el tipo de comando a ejecutar
+            Cmd.CommandType = CommandType.Text
+            'Define el comando
+            CadenaCmd &= "Id = " & Id.ToString.Trim
+            Cmd.CommandText = CadenaCmd
+            'Ejecuta la consulta
+            Call Cmd.ExecuteNonQuery()
+            'Cierra la conexión
+            ConBD.Close()
+        Catch ex As Exception
+            'Copia la cadena de conexión y la de comandos al portapapeles
+            My.Computer.Clipboard.SetText(CadenaConexion & vbCrLf & CadenaCmd)
+            'Defineción del mensaje de error
+            CadenaMsg = ex.Message & CadenaMsg
+            'Genera un nuevo tipo de mensaje de error
+            Throw New ArgumentException(CadenaMsg)
+        Finally
+            'Liberación de objetos utilizados
+            ConBD = Nothing
+            Cmd = Nothing
+        End Try
     End Sub
 
     ''' <summary>
-    ''' Procedimiento utilizado para modificar un afiliado existente
+    ''' Procedimiento utilizado para modificar un afiliado
     ''' </summary>
     ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
     ''' <param name="Afiliado">Obligatorio. Objeto de la clase "Afiliado", con todos los atributos necesarios para modificar el dato general.</param>
     ''' <remarks></remarks>
-    Public Sub Modificar(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String, ByVal Afiliado As Entidades.Afiliado)
-        'Evalúa con que tipo de base de datos se esta trabajando
-        Select Case TipoBaseDatos.ToUpper
-            Case "SQL"
-
-            Case "OLEDB"
-                Dim CapaDatos As New CapaDatos.Afiliados
-                Try
-                    'Ejecuta acciones sobre la capa de datos
-                    Call CapaDatos.ModificacionOLEDB(CadenaConexion, Afiliado)
-                Catch ex As Exception
-                    'Genera el nuevo error
-                    Throw New ArgumentException(ex.Message)
-                Finally
-                    'Libera el objeto utilizado 
-                    CapaDatos = Nothing
-                End Try
-            Case "MYSQL"
-
-            Case "SQLCE"
-
-        End Select
+    Public Sub ModificacionOLEDB(ByVal CadenaConexion As String, ByVal Afiliado As Entidades.Afiliado)
+        Dim Valor As Int64 = 0
+        Dim ConBD As New OleDbConnection
+        Dim Cmd As New OleDbCommand
+        Dim CadenaCmd As String = "Update Afiliados Set "
+        Dim CadenaCategorias As String = ""
+        Dim CadenaMsg As String = vbCrLf & vbCrLf & "   Capa: Datos." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: ModificacionOLEDB."
+        Try
+            'Define la cadena de conexión aplicada a la conexión
+            ConBD.ConnectionString = CadenaConexion
+            'Abre la conexión
+            ConBD.Open()
+            'Asigna la conexión abierta al comando instanciado
+            Cmd.Connection = ConBD
+            'Define el tipo de comando a ejecutar
+            Cmd.CommandType = CommandType.Text
+            'Define el comando
+            With Afiliado
+                CadenaCmd &= "CUIL = " & .CUIL.ToString.Trim & ", "
+                CadenaCmd &= "DNI = " & .DNI.ToString.Trim & ", "
+                CadenaCmd &= "Apellidos ='" & .Apellidos.Trim.ToUpper & "', "
+                CadenaCmd &= "Nombres = '" & .Nombres.Trim.ToUpper & "', "
+                CadenaCmd &= "FechaNacimiento = DateValue ('" & .FechaNacimiento.ToShortDateString.Trim.ToUpper & "'), "
+                CadenaCmd &= "Genero = '" & .Genero.Trim.ToUpper & "', "
+                CadenaCmd &= "Relacion = '" & .Relacion.Trim.ToUpper & "', "
+                CadenaCmd &= "CUIL_Titular = " & .CUILT_Titular.ToString.Trim & ", "
+                CadenaCmd &= "TipoAfiliado = '" & .TipoAfiliado.Trim.ToUpper & "', "
+                CadenaCmd &= "UATRE = " & .UATRE.ToString.Trim & ", "
+                CadenaCmd &= "Provincia = '" & .Provincia.Trim.ToUpper & "', "
+                CadenaCmd &= "BocaExpendio = " & .BocaExpendio.ToString.Trim & ", "
+                CadenaCmd &= "Departamento = '" & .Departamento.Trim.ToUpper & "', "
+                CadenaCmd &= "Localidad = '" & .Localidad.Trim.ToUpper & "', "
+                CadenaCmd &= "Domicilio = '" & .Domicilio.Trim.ToUpper & "', "
+                CadenaCmd &= "Telefono = '" & .Telefono.Trim.ToUpper & "', "
+                CadenaCmd &= "Email = '" & .Email.Trim.ToUpper & "', "
+                CadenaCmd &= "TipoCarga = '" & .TipoCarga & "'"
+                CadenaCmd &= " Where Id = " & .Id.ToString.Trim
+            End With
+            Cmd.CommandText = CadenaCmd
+            'Ejecuta la consulta
+            Call Cmd.ExecuteNonQuery()
+            'Cierra la conexión
+            ConBD.Close()
+        Catch ex As Exception
+            'Copia la cadena de conexión y la de comandos al portapapeles
+            My.Computer.Clipboard.SetText(CadenaConexion & vbCrLf & CadenaCmd)
+            'Defineción del mensaje de error
+            CadenaMsg = ex.Message & CadenaMsg
+            'Genera un nuevo tipo de mensaje de error
+            Throw New ArgumentException(CadenaMsg)
+        Finally
+            'Liberación de objetos utilizados
+            ConBD = Nothing
+            Cmd = Nothing
+        End Try
     End Sub
 
     ''' <summary>
     ''' Función utilizada para buscar un afiliado según su atributo "Id"
     ''' </summary>
     ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
-    ''' <param name="Id">Obligatorio. Número identificador del profesional a buscar.</param>
-    ''' <returns>Colección de objetos de la clase "Afiliado".</returns>
+    ''' <param name="Id">Obligatorio. Número identificador del afiliado a buscar.</param>
+    ''' <returns>Colección de objetos de la clase "ObraSocial".</returns>
     ''' <remarks></remarks>
-    Public Function ConsultaIdentificador(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String, ByVal Id As Int64) As Entidades.Afiliados
+    Public Function ConsultaIdentificadorOLEDB(ByVal CadenaConexion As String, ByVal Id As Int64) As Entidades.Afiliados
         Dim Valor As New Entidades.Afiliados
-        'Evalúa con que tipo de base de datos se esta trabajando
-        Select Case TipoBaseDatos.ToUpper.Trim
-            Case "SQL"
-
-            Case "OLEDB"
-                Dim CapaDatos As New CapaDatos.Afiliados
-                Try
-                    'Ejecuta acciones sobre la capa de datos
-                    Valor = CapaDatos.ConsultaIdentificadorOLEDB(CadenaConexion, Id)
-                Catch ex As Exception
-                    'Genera el nuevo error
-                    Throw New ArgumentException(ex.Message)
-                Finally
-                    'Libera el objeto utilizado 
-                    CapaDatos = Nothing
-                End Try
-            Case "MYSQL"
-
-            Case "SQLCE"
-
-        End Select
+        Dim ConBD As New OleDbConnection
+        Dim Cmd As New OleDbCommand
+        Dim CadenaCmd As String = "Select * from Afiliados Where "
+        Dim TablaCategorias As New List(Of Int64)
+        Dim CadenaMsg As String = vbCrLf & vbCrLf & "   Capa: Datos." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: ConsultaIdentificadorOLEDB."
+        Try
+            'Define la cadena de conexión aplicada a la conexión
+            ConBD.ConnectionString = CadenaConexion
+            'Abre la conexión
+            ConBD.Open()
+            'Asigna la conexión abierta al comando instanciado
+            Cmd.Connection = ConBD
+            'Define el tipo de comando a ejecutar
+            Cmd.CommandType = CommandType.Text
+            'Define el comando
+            CadenaCmd &= "Id = " & Id.ToString.Trim
+            Cmd.CommandText = CadenaCmd
+            'Define el lector que recibirá el resultado de la consulta
+            Dim Lector As OleDbDataReader = Cmd.ExecuteReader
+            'Recorrido secuencial por los registros encontrados
+            While Lector.Read
+                'Define el objeto que recibirá los datos
+                Dim Afiliado As New Entidades.Afiliado
+                'Asigna los valores de los campos a los atributos del objeto
+                With Afiliado
+                    If Not IsDBNull(Lector("Id")) Then .Id = Lector("Id")
+                    If Not IsDBNull(Lector("CUIL")) Then .CUIL = Lector("CUIL")
+                    If Not IsDBNull(Lector("DNI")) Then .DNI = Lector("DNI")
+                    If Not IsDBNull(Lector("Apellidos")) Then .Apellidos = Lector("Apellidos")
+                    If Not IsDBNull(Lector("Nombres")) Then .Nombres = Lector("Nombres")
+                    If Not IsDBNull(Lector("FechaNacimiento")) Then .FechaNacimiento = Lector("FechaNacimiento")
+                    If Not IsDBNull(Lector("Genero")) Then .Genero = Lector("Genero")
+                    If Not IsDBNull(Lector("CUIL_Titular")) Then .CUILT_Titular = Lector("CUIL_Titular")
+                    If Not IsDBNull(Lector("Relacion")) Then .Relacion = Lector("Relacion")
+                    If Not IsDBNull(Lector("TipoAfiliado")) Then .TipoAfiliado = Lector("TipoAfiliado")
+                    If Not IsDBNull(Lector("UATRE")) Then .UATRE = Lector("UATRE")
+                    If Not IsDBNull(Lector("Provincia")) Then .Provincia = Lector("Provincia")
+                    If Not IsDBNull(Lector("BocaExpendio")) Then .BocaExpendio = Lector("BocaExpendio")
+                    If Not IsDBNull(Lector("Departamento")) Then .Departamento = Lector("Departamento")
+                    If Not IsDBNull(Lector("Localidad")) Then .Localidad = Lector("Localidad")
+                    If Not IsDBNull(Lector("Domicilio")) Then .Domicilio = Lector("Domicilio")
+                    If Not IsDBNull(Lector("Telefono")) Then .Telefono = Lector("Telefono")
+                    If Not IsDBNull(Lector("Email")) Then .Email = Lector("Email")
+                    If Not IsDBNull(Lector("TipoCarga")) Then .TipoCarga = Lector("TipoCarga")
+                End With
+                'Inserta el objeto a la colección respectiva
+                Valor.Add(Afiliado)
+                'Libera el objeto
+                Afiliado = Nothing
+            End While
+            'Cierra la conexión
+            ConBD.Close()
+        Catch ex As Exception
+            'Copia la cadena de conexión y la de comandos al portapapeles
+            My.Computer.Clipboard.SetText(CadenaConexion & vbCrLf & CadenaCmd)
+            'Defineción del mensaje de error
+            CadenaMsg = ex.Message & CadenaMsg
+            'Genera un nuevo tipo de mensaje de error
+            Throw New ArgumentException(CadenaMsg)
+        Finally
+            'Liberación de objetos utilizados
+            ConBD = Nothing
+            Cmd = Nothing
+        End Try
         'Valor de retorno de la función
         Return Valor
     End Function
@@ -184,33 +358,75 @@ Public Class Afiliados
     ''' Función utilizada para buscar un afiliado según su atributo "CUIL"
     ''' </summary>
     ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
-    ''' <param name="CUIL">Obligatorio. Número identificador del profesional a buscar.</param>
+    ''' <param name="CUIL">Obligatorio. CUIL del afiliado a buscar.</param>
     ''' <returns>Colección de objetos de la clase "Afiliado".</returns>
     ''' <remarks></remarks>
-    Public Function ConsultaCUIL(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String, ByVal CUIL As Int64) As Entidades.Afiliados
+    Public Function ConsultaCUILOLEDB(ByVal CadenaConexion As String, ByVal CUIL As Int64) As Entidades.Afiliados
         Dim Valor As New Entidades.Afiliados
-        'Evalúa con que tipo de base de datos se esta trabajando
-        Select Case TipoBaseDatos.ToUpper.Trim
-            Case "SQL"
-
-            Case "OLEDB"
-                Dim CapaDatos As New CapaDatos.Afiliados
-                Try
-                    'Ejecuta acciones sobre la capa de datos
-                    Valor = CapaDatos.ConsultaCUILOLEDB(CadenaConexion, CUIL)
-                Catch ex As Exception
-                    'Genera el nuevo error
-                    Throw New ArgumentException(ex.Message)
-                Finally
-                    'Libera el objeto utilizado 
-                    CapaDatos = Nothing
-                End Try
-            Case "MYSQL"
-
-            Case "SQLCE"
-
-        End Select
+        Dim ConBD As New OleDbConnection
+        Dim Cmd As New OleDbCommand
+        Dim CadenaCmd As String = "Select * from Afiliados Where "
+        Dim TablaCategorias As New List(Of Int64)
+        Dim CadenaMsg As String = vbCrLf & vbCrLf & "   Capa: Datos." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: ConsultaCUILOLEDB."
+        Try
+            'Define la cadena de conexión aplicada a la conexión
+            ConBD.ConnectionString = CadenaConexion
+            'Abre la conexión
+            ConBD.Open()
+            'Asigna la conexión abierta al comando instanciado
+            Cmd.Connection = ConBD
+            'Define el tipo de comando a ejecutar
+            Cmd.CommandType = CommandType.Text
+            'Define el comando
+            CadenaCmd &= "CUIL = " & CUIL.ToString.Trim.ToUpper
+            Cmd.CommandText = CadenaCmd
+            'Define el lector que recibirá el resultado de la consulta
+            Dim Lector As OleDbDataReader = Cmd.ExecuteReader
+            'Recorrido secuencial por los registros encontrados
+            While Lector.Read
+                'Define el objeto que recibirá los datos
+                Dim Afiliado As New Entidades.Afiliado
+                'Asigna los valores de los campos a los atributos del objeto
+                With Afiliado
+                    If Not IsDBNull(Lector("Id")) Then .Id = Lector("Id")
+                    If Not IsDBNull(Lector("CUIL")) Then .CUIL = Lector("CUIL")
+                    If Not IsDBNull(Lector("DNI")) Then .DNI = Lector("DNI")
+                    If Not IsDBNull(Lector("Apellidos")) Then .Apellidos = Lector("Apellidos")
+                    If Not IsDBNull(Lector("Nombres")) Then .Nombres = Lector("Nombres")
+                    If Not IsDBNull(Lector("FechaNacimiento")) Then .FechaNacimiento = Lector("FechaNacimiento")
+                    If Not IsDBNull(Lector("Genero")) Then .Genero = Lector("Genero")
+                    If Not IsDBNull(Lector("CUIL_Titular")) Then .CUILT_Titular = Lector("CUIL_Titular")
+                    If Not IsDBNull(Lector("Relacion")) Then .Relacion = Lector("Relacion")
+                    If Not IsDBNull(Lector("TipoAfiliado")) Then .TipoAfiliado = Lector("TipoAfiliado")
+                    If Not IsDBNull(Lector("UATRE")) Then .UATRE = Lector("UATRE")
+                    If Not IsDBNull(Lector("Provincia")) Then .Provincia = Lector("Provincia")
+                    If Not IsDBNull(Lector("BocaExpendio")) Then .BocaExpendio = Lector("BocaExpendio")
+                    If Not IsDBNull(Lector("Departamento")) Then .Departamento = Lector("Departamento")
+                    If Not IsDBNull(Lector("Localidad")) Then .Localidad = Lector("Localidad")
+                    If Not IsDBNull(Lector("Domicilio")) Then .Domicilio = Lector("Domicilio")
+                    If Not IsDBNull(Lector("Telefono")) Then .Telefono = Lector("Telefono")
+                    If Not IsDBNull(Lector("Email")) Then .Email = Lector("Email")
+                    If Not IsDBNull(Lector("TipoCarga")) Then .TipoCarga = Lector("TipoCarga")
+                End With
+                'Inserta el objeto a la colección respectiva
+                Valor.Add(Afiliado)
+                'Libera el objeto
+                Afiliado = Nothing
+            End While
+            'Cierra la conexión
+            ConBD.Close()
+        Catch ex As Exception
+            'Copia la cadena de conexión y la de comandos al portapapeles
+            My.Computer.Clipboard.SetText(CadenaConexion & vbCrLf & CadenaCmd)
+            'Defineción del mensaje de error
+            CadenaMsg = ex.Message & CadenaMsg
+            'Genera un nuevo tipo de mensaje de error
+            Throw New ArgumentException(CadenaMsg)
+        Finally
+            'Liberación de objetos utilizados
+            ConBD = Nothing
+            Cmd = Nothing
+        End Try
         'Valor de retorno de la función
         Return Valor
     End Function
@@ -219,33 +435,75 @@ Public Class Afiliados
     ''' Función utilizada para buscar un afiliado según su atributo "DNI"
     ''' </summary>
     ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
-    ''' <param name="DNI">Obligatorio. Número identificador del profesional a buscar.</param>
+    ''' <param name="DNI">Obligatorio. DNI del afiliado a buscar.</param>
     ''' <returns>Colección de objetos de la clase "Afiliado".</returns>
     ''' <remarks></remarks>
-    Public Function ConsultaDNI(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String, ByVal DNI As Int64) As Entidades.Afiliados
+    Public Function ConsultaDNIOLEDB(ByVal CadenaConexion As String, ByVal DNI As Int64) As Entidades.Afiliados
         Dim Valor As New Entidades.Afiliados
-        'Evalúa con que tipo de base de datos se esta trabajando
-        Select Case TipoBaseDatos.ToUpper.Trim
-            Case "SQL"
-
-            Case "OLEDB"
-                Dim CapaDatos As New CapaDatos.Afiliados
-                Try
-                    'Ejecuta acciones sobre la capa de datos
-                    Valor = CapaDatos.ConsultaDNIOLEDB(CadenaConexion, DNI)
-                Catch ex As Exception
-                    'Genera el nuevo error
-                    Throw New ArgumentException(ex.Message)
-                Finally
-                    'Libera el objeto utilizado 
-                    CapaDatos = Nothing
-                End Try
-            Case "MYSQL"
-
-            Case "SQLCE"
-
-        End Select
+        Dim ConBD As New OleDbConnection
+        Dim Cmd As New OleDbCommand
+        Dim CadenaCmd As String = "Select * from Afiliados Where "
+        Dim TablaCategorias As New List(Of Int64)
+        Dim CadenaMsg As String = vbCrLf & vbCrLf & "   Capa: Datos." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: ConsultaDNIOLEDB."
+        Try
+            'Define la cadena de conexión aplicada a la conexión
+            ConBD.ConnectionString = CadenaConexion
+            'Abre la conexión
+            ConBD.Open()
+            'Asigna la conexión abierta al comando instanciado
+            Cmd.Connection = ConBD
+            'Define el tipo de comando a ejecutar
+            Cmd.CommandType = CommandType.Text
+            'Define el comando
+            CadenaCmd &= "DNI = " & DNI.ToString.Trim.ToUpper
+            Cmd.CommandText = CadenaCmd
+            'Define el lector que recibirá el resultado de la consulta
+            Dim Lector As OleDbDataReader = Cmd.ExecuteReader
+            'Recorrido secuencial por los registros encontrados
+            While Lector.Read
+                'Define el objeto que recibirá los datos
+                Dim Afiliado As New Entidades.Afiliado
+                'Asigna los valores de los campos a los atributos del objeto
+                With Afiliado
+                    If Not IsDBNull(Lector("Id")) Then .Id = Lector("Id")
+                    If Not IsDBNull(Lector("CUIL")) Then .CUIL = Lector("CUIL")
+                    If Not IsDBNull(Lector("DNI")) Then .DNI = Lector("DNI")
+                    If Not IsDBNull(Lector("Apellidos")) Then .Apellidos = Lector("Apellidos")
+                    If Not IsDBNull(Lector("Nombres")) Then .Nombres = Lector("Nombres")
+                    If Not IsDBNull(Lector("FechaNacimiento")) Then .FechaNacimiento = Lector("FechaNacimiento")
+                    If Not IsDBNull(Lector("Genero")) Then .Genero = Lector("Genero")
+                    If Not IsDBNull(Lector("CUIL_Titular")) Then .CUILT_Titular = Lector("CUIL_Titular")
+                    If Not IsDBNull(Lector("Relacion")) Then .Relacion = Lector("Relacion")
+                    If Not IsDBNull(Lector("TipoAfiliado")) Then .TipoAfiliado = Lector("TipoAfiliado")
+                    If Not IsDBNull(Lector("UATRE")) Then .UATRE = Lector("UATRE")
+                    If Not IsDBNull(Lector("Provincia")) Then .Provincia = Lector("Provincia")
+                    If Not IsDBNull(Lector("BocaExpendio")) Then .BocaExpendio = Lector("BocaExpendio")
+                    If Not IsDBNull(Lector("Departamento")) Then .Departamento = Lector("Departamento")
+                    If Not IsDBNull(Lector("Localidad")) Then .Localidad = Lector("Localidad")
+                    If Not IsDBNull(Lector("Domicilio")) Then .Domicilio = Lector("Domicilio")
+                    If Not IsDBNull(Lector("Telefono")) Then .Telefono = Lector("Telefono")
+                    If Not IsDBNull(Lector("Email")) Then .Email = Lector("Email")
+                    If Not IsDBNull(Lector("TipoCarga")) Then .TipoCarga = Lector("TipoCarga")
+                End With
+                'Inserta el objeto a la colección respectiva
+                Valor.Add(Afiliado)
+                'Libera el objeto
+                Afiliado = Nothing
+            End While
+            'Cierra la conexión
+            ConBD.Close()
+        Catch ex As Exception
+            'Copia la cadena de conexión y la de comandos al portapapeles
+            My.Computer.Clipboard.SetText(CadenaConexion & vbCrLf & CadenaCmd)
+            'Defineción del mensaje de error
+            CadenaMsg = ex.Message & CadenaMsg
+            'Genera un nuevo tipo de mensaje de error
+            Throw New ArgumentException(CadenaMsg)
+        Finally
+            'Liberación de objetos utilizados
+            ConBD = Nothing
+            Cmd = Nothing
+        End Try
         'Valor de retorno de la función
         Return Valor
     End Function
@@ -254,34 +512,77 @@ Public Class Afiliados
     ''' Función utilizada para buscar un afiliado según sus atributos "CUIL" y "DNI"
     ''' </summary>
     ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
-    ''' <param name="CUIL">Obligatorio. Número identificador del profesional a buscar.</param>
-    ''' <param name="DNI">Obligatorio. Documento del afiliado a buscar.</param>
+    ''' <param name="CUIL">Obligatorio. CUIL del afiliado a buscar.</param>
+    ''' <param name="DNI">Obligatorio. DNI del afiliado a buscar.</param>
     ''' <returns>Colección de objetos de la clase "Afiliado".</returns>
     ''' <remarks></remarks>
-    Public Function ConsultaCUILDNI(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String, ByVal CUIL As Int64, ByVal DNI As Int64) As Entidades.Afiliados
+    Public Function ConsultaCUILDNIOLEDB(ByVal CadenaConexion As String, ByVal CUIL As Int64, ByVal DNI As Int64) As Entidades.Afiliados
         Dim Valor As New Entidades.Afiliados
-        'Evalúa con que tipo de base de datos se esta trabajando
-        Select Case TipoBaseDatos.ToUpper.Trim
-            Case "SQL"
-
-            Case "OLEDB"
-                Dim CapaDatos As New CapaDatos.Afiliados
-                Try
-                    'Ejecuta acciones sobre la capa de datos
-                    Valor = CapaDatos.ConsultaCUILDNIOLEDB(CadenaConexion, CUIL, DNI)
-                Catch ex As Exception
-                    'Genera el nuevo error
-                    Throw New ArgumentException(ex.Message)
-                Finally
-                    'Libera el objeto utilizado 
-                    CapaDatos = Nothing
-                End Try
-            Case "MYSQL"
-
-            Case "SQLCE"
-
-        End Select
+        Dim ConBD As New OleDbConnection
+        Dim Cmd As New OleDbCommand
+        Dim CadenaCmd As String = "Select * from Afiliados Where "
+        Dim TablaCategorias As New List(Of Int64)
+        Dim CadenaMsg As String = vbCrLf & vbCrLf & "   Capa: Datos." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: ConsultaCUILOLEDB."
+        Try
+            'Define la cadena de conexión aplicada a la conexión
+            ConBD.ConnectionString = CadenaConexion
+            'Abre la conexión
+            ConBD.Open()
+            'Asigna la conexión abierta al comando instanciado
+            Cmd.Connection = ConBD
+            'Define el tipo de comando a ejecutar
+            Cmd.CommandType = CommandType.Text
+            'Define el comando
+            CadenaCmd &= "CUIL = " & CUIL.ToString.Trim
+            CadenaCmd &= " and DNI = " & DNI.ToString.Trim
+            Cmd.CommandText = CadenaCmd
+            'Define el lector que recibirá el resultado de la consulta
+            Dim Lector As OleDbDataReader = Cmd.ExecuteReader
+            'Recorrido secuencial por los registros encontrados
+            While Lector.Read
+                'Define el objeto que recibirá los datos
+                Dim Afiliado As New Entidades.Afiliado
+                'Asigna los valores de los campos a los atributos del objeto
+                With Afiliado
+                    If Not IsDBNull(Lector("Id")) Then .Id = Lector("Id")
+                    If Not IsDBNull(Lector("CUIL")) Then .CUIL = Lector("CUIL")
+                    If Not IsDBNull(Lector("DNI")) Then .DNI = Lector("DNI")
+                    If Not IsDBNull(Lector("Apellidos")) Then .Apellidos = Lector("Apellidos")
+                    If Not IsDBNull(Lector("Nombres")) Then .Nombres = Lector("Nombres")
+                    If Not IsDBNull(Lector("FechaNacimiento")) Then .FechaNacimiento = Lector("FechaNacimiento")
+                    If Not IsDBNull(Lector("Genero")) Then .Genero = Lector("Genero")
+                    If Not IsDBNull(Lector("CUIL_Titular")) Then .CUILT_Titular = Lector("CUIL_Titular")
+                    If Not IsDBNull(Lector("Relacion")) Then .Relacion = Lector("Relacion")
+                    If Not IsDBNull(Lector("TipoAfiliado")) Then .TipoAfiliado = Lector("TipoAfiliado")
+                    If Not IsDBNull(Lector("UATRE")) Then .UATRE = Lector("UATRE")
+                    If Not IsDBNull(Lector("Provincia")) Then .Provincia = Lector("Provincia")
+                    If Not IsDBNull(Lector("BocaExpendio")) Then .BocaExpendio = Lector("BocaExpendio")
+                    If Not IsDBNull(Lector("Departamento")) Then .Departamento = Lector("Departamento")
+                    If Not IsDBNull(Lector("Localidad")) Then .Localidad = Lector("Localidad")
+                    If Not IsDBNull(Lector("Domicilio")) Then .Domicilio = Lector("Domicilio")
+                    If Not IsDBNull(Lector("Telefono")) Then .Telefono = Lector("Telefono")
+                    If Not IsDBNull(Lector("Email")) Then .Email = Lector("Email")
+                    If Not IsDBNull(Lector("TipoCarga")) Then .TipoCarga = Lector("TipoCarga")
+                End With
+                'Inserta el objeto a la colección respectiva
+                Valor.Add(Afiliado)
+                'Libera el objeto
+                Afiliado = Nothing
+            End While
+            'Cierra la conexión
+            ConBD.Close()
+        Catch ex As Exception
+            'Copia la cadena de conexión y la de comandos al portapapeles
+            My.Computer.Clipboard.SetText(CadenaConexion & vbCrLf & CadenaCmd)
+            'Defineción del mensaje de error
+            CadenaMsg = ex.Message & CadenaMsg
+            'Genera un nuevo tipo de mensaje de error
+            Throw New ArgumentException(CadenaMsg)
+        Finally
+            'Liberación de objetos utilizados
+            ConBD = Nothing
+            Cmd = Nothing
+        End Try
         'Valor de retorno de la función
         Return Valor
     End Function
@@ -290,34 +591,77 @@ Public Class Afiliados
     ''' Función utilizada para buscar un afiliado según sus atributos "CUIL_Titular" y "DNI"
     ''' </summary>
     ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
-    ''' <param name="CUIL_Titular">Obligatorio. Número identificador del profesional a buscar.</param>
-    ''' <param name="DNI">Obligatorio. Documento del afiliado a buscar.</param>
+    ''' <param name="CUIL_Titular">Obligatorio. CUIL del titular del grupo familiar a buscar.</param>
+    ''' <param name="DNI">Obligatorio. DNI del afiliado a buscar.</param>
     ''' <returns>Colección de objetos de la clase "Afiliado".</returns>
     ''' <remarks></remarks>
-    Public Function ConsultaCUIL_TitularDNI(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String, ByVal CUIL_Titular As Int64, ByVal DNI As Int64) As Entidades.Afiliados
+    Public Function ConsultaCUIL_TitularDNIOLEDB(ByVal CadenaConexion As String, ByVal CUIL_Titular As Int64, ByVal DNI As Int64) As Entidades.Afiliados
         Dim Valor As New Entidades.Afiliados
-        'Evalúa con que tipo de base de datos se esta trabajando
-        Select Case TipoBaseDatos.ToUpper.Trim
-            Case "SQL"
-
-            Case "OLEDB"
-                Dim CapaDatos As New CapaDatos.Afiliados
-                Try
-                    'Ejecuta acciones sobre la capa de datos
-                    Valor = CapaDatos.ConsultaCUIL_TitularDNIOLEDB(CadenaConexion, CUIL_Titular, DNI)
-                Catch ex As Exception
-                    'Genera el nuevo error
-                    Throw New ArgumentException(ex.Message)
-                Finally
-                    'Libera el objeto utilizado 
-                    CapaDatos = Nothing
-                End Try
-            Case "MYSQL"
-
-            Case "SQLCE"
-
-        End Select
+        Dim ConBD As New OleDbConnection
+        Dim Cmd As New OleDbCommand
+        Dim CadenaCmd As String = "Select * from Afiliados Where "
+        Dim TablaCategorias As New List(Of Int64)
+        Dim CadenaMsg As String = vbCrLf & vbCrLf & "   Capa: Datos." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: ConsultaCUIL_TitularDNIOLEDB."
+        Try
+            'Define la cadena de conexión aplicada a la conexión
+            ConBD.ConnectionString = CadenaConexion
+            'Abre la conexión
+            ConBD.Open()
+            'Asigna la conexión abierta al comando instanciado
+            Cmd.Connection = ConBD
+            'Define el tipo de comando a ejecutar
+            Cmd.CommandType = CommandType.Text
+            'Define el comando
+            CadenaCmd &= "CUIL_Titular = " & CUIL_Titular.ToString.Trim
+            CadenaCmd &= " and DNI = " & DNI.ToString.Trim
+            Cmd.CommandText = CadenaCmd
+            'Define el lector que recibirá el resultado de la consulta
+            Dim Lector As OleDbDataReader = Cmd.ExecuteReader
+            'Recorrido secuencial por los registros encontrados
+            While Lector.Read
+                'Define el objeto que recibirá los datos
+                Dim Afiliado As New Entidades.Afiliado
+                'Asigna los valores de los campos a los atributos del objeto
+                With Afiliado
+                    If Not IsDBNull(Lector("Id")) Then .Id = Lector("Id")
+                    If Not IsDBNull(Lector("CUIL")) Then .CUIL = Lector("CUIL")
+                    If Not IsDBNull(Lector("DNI")) Then .DNI = Lector("DNI")
+                    If Not IsDBNull(Lector("Apellidos")) Then .Apellidos = Lector("Apellidos")
+                    If Not IsDBNull(Lector("Nombres")) Then .Nombres = Lector("Nombres")
+                    If Not IsDBNull(Lector("FechaNacimiento")) Then .FechaNacimiento = Lector("FechaNacimiento")
+                    If Not IsDBNull(Lector("Genero")) Then .Genero = Lector("Genero")
+                    If Not IsDBNull(Lector("CUIL_Titular")) Then .CUILT_Titular = Lector("CUIL_Titular")
+                    If Not IsDBNull(Lector("Relacion")) Then .Relacion = Lector("Relacion")
+                    If Not IsDBNull(Lector("TipoAfiliado")) Then .TipoAfiliado = Lector("TipoAfiliado")
+                    If Not IsDBNull(Lector("UATRE")) Then .UATRE = Lector("UATRE")
+                    If Not IsDBNull(Lector("Provincia")) Then .Provincia = Lector("Provincia")
+                    If Not IsDBNull(Lector("BocaExpendio")) Then .BocaExpendio = Lector("BocaExpendio")
+                    If Not IsDBNull(Lector("Departamento")) Then .Departamento = Lector("Departamento")
+                    If Not IsDBNull(Lector("Localidad")) Then .Localidad = Lector("Localidad")
+                    If Not IsDBNull(Lector("Domicilio")) Then .Domicilio = Lector("Domicilio")
+                    If Not IsDBNull(Lector("Telefono")) Then .Telefono = Lector("Telefono")
+                    If Not IsDBNull(Lector("Email")) Then .Email = Lector("Email")
+                    If Not IsDBNull(Lector("TipoCarga")) Then .TipoCarga = Lector("TipoCarga")
+                End With
+                'Inserta el objeto a la colección respectiva
+                Valor.Add(Afiliado)
+                'Libera el objeto
+                Afiliado = Nothing
+            End While
+            'Cierra la conexión
+            ConBD.Close()
+        Catch ex As Exception
+            'Copia la cadena de conexión y la de comandos al portapapeles
+            My.Computer.Clipboard.SetText(CadenaConexion & vbCrLf & CadenaCmd)
+            'Defineción del mensaje de error
+            CadenaMsg = ex.Message & CadenaMsg
+            'Genera un nuevo tipo de mensaje de error
+            Throw New ArgumentException(CadenaMsg)
+        Finally
+            'Liberación de objetos utilizados
+            ConBD = Nothing
+            Cmd = Nothing
+        End Try
         'Valor de retorno de la función
         Return Valor
     End Function
@@ -326,33 +670,76 @@ Public Class Afiliados
     ''' Función utilizada para buscar un afiliado según su atributo "Genero"
     ''' </summary>
     ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
     ''' <param name="Genero">Obligatorio. Genero del afiliado a buscar.</param>
     ''' <returns>Colección de objetos de la clase "Afiliado".</returns>
     ''' <remarks></remarks>
-    Public Function ConsultaGenero(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String, ByVal Genero As String) As Entidades.Afiliados
+    Public Function ConsultaGeneroOLEDB(ByVal CadenaConexion As String, ByVal Genero As String) As Entidades.Afiliados
         Dim Valor As New Entidades.Afiliados
-        'Evalúa con que tipo de base de datos se esta trabajando
-        Select Case TipoBaseDatos.ToUpper.Trim
-            Case "SQL"
-
-            Case "OLEDB"
-                Dim CapaDatos As New CapaDatos.Afiliados
-                Try
-                    'Ejecuta acciones sobre la capa de datos
-                    Valor = CapaDatos.ConsultaGeneroOLEDB(CadenaConexion, Genero)
-                Catch ex As Exception
-                    'Genera el nuevo error
-                    Throw New ArgumentException(ex.Message)
-                Finally
-                    'Libera el objeto utilizado 
-                    CapaDatos = Nothing
-                End Try
-            Case "MYSQL"
-
-            Case "SQLCE"
-
-        End Select
+        Dim ConBD As New OleDbConnection
+        Dim Cmd As New OleDbCommand
+        Dim CadenaCmd As String = "Select * from Afiliados Where "
+        Dim TablaCategorias As New List(Of Int64)
+        Dim CadenaMsg As String = vbCrLf & vbCrLf & "   Capa: Datos." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: ConsultaGeneroOLEDB."
+        Try
+            'Define la cadena de conexión aplicada a la conexión
+            ConBD.ConnectionString = CadenaConexion
+            'Abre la conexión
+            ConBD.Open()
+            'Asigna la conexión abierta al comando instanciado
+            Cmd.Connection = ConBD
+            'Define el tipo de comando a ejecutar
+            Cmd.CommandType = CommandType.Text
+            'Define el comando
+            CadenaCmd &= "Genero = '" & Genero.Trim.ToUpper & "'"
+            CadenaCmd &= " Order by Apellidos, Nombres"
+            Cmd.CommandText = CadenaCmd
+            'Define el lector que recibirá el resultado de la consulta
+            Dim Lector As OleDbDataReader = Cmd.ExecuteReader
+            'Recorrido secuencial por los registros encontrados
+            While Lector.Read
+                'Define el objeto que recibirá los datos
+                Dim Afiliado As New Entidades.Afiliado
+                'Asigna los valores de los campos a los atributos del objeto
+                With Afiliado
+                    If Not IsDBNull(Lector("Id")) Then .Id = Lector("Id")
+                    If Not IsDBNull(Lector("CUIL")) Then .CUIL = Lector("CUIL")
+                    If Not IsDBNull(Lector("DNI")) Then .DNI = Lector("DNI")
+                    If Not IsDBNull(Lector("Apellidos")) Then .Apellidos = Lector("Apellidos")
+                    If Not IsDBNull(Lector("Nombres")) Then .Nombres = Lector("Nombres")
+                    If Not IsDBNull(Lector("FechaNacimiento")) Then .FechaNacimiento = Lector("FechaNacimiento")
+                    If Not IsDBNull(Lector("Genero")) Then .Genero = Lector("Genero")
+                    If Not IsDBNull(Lector("CUIL_Titular")) Then .CUILT_Titular = Lector("CUIL_Titular")
+                    If Not IsDBNull(Lector("Relacion")) Then .Relacion = Lector("Relacion")
+                    If Not IsDBNull(Lector("TipoAfiliado")) Then .TipoAfiliado = Lector("TipoAfiliado")
+                    If Not IsDBNull(Lector("UATRE")) Then .UATRE = Lector("UATRE")
+                    If Not IsDBNull(Lector("Provincia")) Then .Provincia = Lector("Provincia")
+                    If Not IsDBNull(Lector("BocaExpendio")) Then .BocaExpendio = Lector("BocaExpendio")
+                    If Not IsDBNull(Lector("Departamento")) Then .Departamento = Lector("Departamento")
+                    If Not IsDBNull(Lector("Localidad")) Then .Localidad = Lector("Localidad")
+                    If Not IsDBNull(Lector("Domicilio")) Then .Domicilio = Lector("Domicilio")
+                    If Not IsDBNull(Lector("Telefono")) Then .Telefono = Lector("Telefono")
+                    If Not IsDBNull(Lector("Email")) Then .Email = Lector("Email")
+                    If Not IsDBNull(Lector("TipoCarga")) Then .TipoCarga = Lector("TipoCarga")
+                End With
+                'Inserta el objeto a la colección respectiva
+                Valor.Add(Afiliado)
+                'Libera el objeto
+                Afiliado = Nothing
+            End While
+            'Cierra la conexión
+            ConBD.Close()
+        Catch ex As Exception
+            'Copia la cadena de conexión y la de comandos al portapapeles
+            My.Computer.Clipboard.SetText(CadenaConexion & vbCrLf & CadenaCmd)
+            'Defineción del mensaje de error
+            CadenaMsg = ex.Message & CadenaMsg
+            'Genera un nuevo tipo de mensaje de error
+            Throw New ArgumentException(CadenaMsg)
+        Finally
+            'Liberación de objetos utilizados
+            ConBD = Nothing
+            Cmd = Nothing
+        End Try
         'Valor de retorno de la función
         Return Valor
     End Function
@@ -361,68 +748,76 @@ Public Class Afiliados
     ''' Función utilizada para buscar un afiliado según su atributo "Relacion"
     ''' </summary>
     ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
-    ''' <param name="Relacion">Obligatorio. Relación del afiliado a buscar.</param>
+    ''' <param name="Relacion">Obligatorio. Relacion del afiliado a buscar.</param>
     ''' <returns>Colección de objetos de la clase "Afiliado".</returns>
     ''' <remarks></remarks>
-    Public Function ConsultaRelacion(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String, ByVal Relacion As String) As Entidades.Afiliados
+    Public Function ConsultaRelacionOLEDB(ByVal CadenaConexion As String, ByVal Relacion As String) As Entidades.Afiliados
         Dim Valor As New Entidades.Afiliados
-        'Evalúa con que tipo de base de datos se esta trabajando
-        Select Case TipoBaseDatos.ToUpper.Trim
-            Case "SQL"
-
-            Case "OLEDB"
-                Dim CapaDatos As New CapaDatos.Afiliados
-                Try
-                    'Ejecuta acciones sobre la capa de datos
-                    Valor = CapaDatos.ConsultaRelacionOLEDB(CadenaConexion, Relacion)
-                Catch ex As Exception
-                    'Genera el nuevo error
-                    Throw New ArgumentException(ex.Message)
-                Finally
-                    'Libera el objeto utilizado 
-                    CapaDatos = Nothing
-                End Try
-            Case "MYSQL"
-
-            Case "SQLCE"
-
-        End Select
-        'Valor de retorno de la función
-        Return Valor
-    End Function
-
-    ''' <summary>
-    ''' Función utilizada para buscar el grupo familiar según su atributo "CUIL_Titular"
-    ''' </summary>
-    ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
-    ''' <param name="CUIL_Titular">Obligatorio. Número identificador del profesional a buscar.</param>
-    ''' <returns>Colección de objetos de la clase "Afiliado".</returns>
-    ''' <remarks></remarks>
-    Public Function ConsultaGrupoFamiliar(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String, ByVal CUIL_Titular As Int64) As Entidades.Afiliados
-        Dim Valor As New Entidades.Afiliados
-        'Evalúa con que tipo de base de datos se esta trabajando
-        Select Case TipoBaseDatos.ToUpper.Trim
-            Case "SQL"
-
-            Case "OLEDB"
-                Dim CapaDatos As New CapaDatos.Afiliados
-                Try
-                    'Ejecuta acciones sobre la capa de datos
-                    Valor = CapaDatos.ConsultaGrupoFamiliarLEDB(CadenaConexion, CUIL_Titular)
-                Catch ex As Exception
-                    'Genera el nuevo error
-                    Throw New ArgumentException(ex.Message)
-                Finally
-                    'Libera el objeto utilizado 
-                    CapaDatos = Nothing
-                End Try
-            Case "MYSQL"
-
-            Case "SQLCE"
-
-        End Select
+        Dim ConBD As New OleDbConnection
+        Dim Cmd As New OleDbCommand
+        Dim CadenaCmd As String = "Select * from Afiliados Where "
+        Dim TablaCategorias As New List(Of Int64)
+        Dim CadenaMsg As String = vbCrLf & vbCrLf & "   Capa: Datos." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: ConsultaRelacionOLEDB."
+        Try
+            'Define la cadena de conexión aplicada a la conexión
+            ConBD.ConnectionString = CadenaConexion
+            'Abre la conexión
+            ConBD.Open()
+            'Asigna la conexión abierta al comando instanciado
+            Cmd.Connection = ConBD
+            'Define el tipo de comando a ejecutar
+            Cmd.CommandType = CommandType.Text
+            'Define el comando
+            CadenaCmd &= "Relacion = '" & Relacion.Trim.ToUpper & "'"
+            CadenaCmd &= " Order by Apellidos, Nombres"
+            Cmd.CommandText = CadenaCmd
+            'Define el lector que recibirá el resultado de la consulta
+            Dim Lector As OleDbDataReader = Cmd.ExecuteReader
+            'Recorrido secuencial por los registros encontrados
+            While Lector.Read
+                'Define el objeto que recibirá los datos
+                Dim Afiliado As New Entidades.Afiliado
+                'Asigna los valores de los campos a los atributos del objeto
+                With Afiliado
+                    If Not IsDBNull(Lector("Id")) Then .Id = Lector("Id")
+                    If Not IsDBNull(Lector("CUIL")) Then .CUIL = Lector("CUIL")
+                    If Not IsDBNull(Lector("DNI")) Then .DNI = Lector("DNI")
+                    If Not IsDBNull(Lector("Apellidos")) Then .Apellidos = Lector("Apellidos")
+                    If Not IsDBNull(Lector("Nombres")) Then .Nombres = Lector("Nombres")
+                    If Not IsDBNull(Lector("FechaNacimiento")) Then .FechaNacimiento = Lector("FechaNacimiento")
+                    If Not IsDBNull(Lector("Genero")) Then .Genero = Lector("Genero")
+                    If Not IsDBNull(Lector("CUIL_Titular")) Then .CUILT_Titular = Lector("CUIL_Titular")
+                    If Not IsDBNull(Lector("Relacion")) Then .Relacion = Lector("Relacion")
+                    If Not IsDBNull(Lector("TipoAfiliado")) Then .TipoAfiliado = Lector("TipoAfiliado")
+                    If Not IsDBNull(Lector("UATRE")) Then .UATRE = Lector("UATRE")
+                    If Not IsDBNull(Lector("Provincia")) Then .Provincia = Lector("Provincia")
+                    If Not IsDBNull(Lector("BocaExpendio")) Then .BocaExpendio = Lector("BocaExpendio")
+                    If Not IsDBNull(Lector("Departamento")) Then .Departamento = Lector("Departamento")
+                    If Not IsDBNull(Lector("Localidad")) Then .Localidad = Lector("Localidad")
+                    If Not IsDBNull(Lector("Domicilio")) Then .Domicilio = Lector("Domicilio")
+                    If Not IsDBNull(Lector("Telefono")) Then .Telefono = Lector("Telefono")
+                    If Not IsDBNull(Lector("Email")) Then .Email = Lector("Email")
+                    If Not IsDBNull(Lector("TipoCarga")) Then .TipoCarga = Lector("TipoCarga")
+                End With
+                'Inserta el objeto a la colección respectiva
+                Valor.Add(Afiliado)
+                'Libera el objeto
+                Afiliado = Nothing
+            End While
+            'Cierra la conexión
+            ConBD.Close()
+        Catch ex As Exception
+            'Copia la cadena de conexión y la de comandos al portapapeles
+            My.Computer.Clipboard.SetText(CadenaConexion & vbCrLf & CadenaCmd)
+            'Defineción del mensaje de error
+            CadenaMsg = ex.Message & CadenaMsg
+            'Genera un nuevo tipo de mensaje de error
+            Throw New ArgumentException(CadenaMsg)
+        Finally
+            'Liberación de objetos utilizados
+            ConBD = Nothing
+            Cmd = Nothing
+        End Try
         'Valor de retorno de la función
         Return Valor
     End Function
@@ -431,33 +826,154 @@ Public Class Afiliados
     ''' Función utilizada para buscar un afiliado según su atributo "TipoAfiliado"
     ''' </summary>
     ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
-    ''' <param name="TipoAfiliado">Obligatorio. Relación del afiliado a buscar.</param>
+    ''' <param name="TipoAfiliado">Obligatorio. Relacion del afiliado a buscar.</param>
     ''' <returns>Colección de objetos de la clase "Afiliado".</returns>
     ''' <remarks></remarks>
-    Public Function ConsultaTipoAfiliado(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String, ByVal TipoAfiliado As String) As Entidades.Afiliados
+    Public Function ConsultaTipoAfiliadoOLEDB(ByVal CadenaConexion As String, ByVal TipoAfiliado As String) As Entidades.Afiliados
         Dim Valor As New Entidades.Afiliados
-        'Evalúa con que tipo de base de datos se esta trabajando
-        Select Case TipoBaseDatos.ToUpper.Trim
-            Case "SQL"
+        Dim ConBD As New OleDbConnection
+        Dim Cmd As New OleDbCommand
+        Dim CadenaCmd As String = "Select * from Afiliados Where "
+        Dim TablaCategorias As New List(Of Int64)
+        Dim CadenaMsg As String = vbCrLf & vbCrLf & "   Capa: Datos." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: ConsultaTipoAfiliadoOLEDB."
+        Try
+            'Define la cadena de conexión aplicada a la conexión
+            ConBD.ConnectionString = CadenaConexion
+            'Abre la conexión
+            ConBD.Open()
+            'Asigna la conexión abierta al comando instanciado
+            Cmd.Connection = ConBD
+            'Define el tipo de comando a ejecutar
+            Cmd.CommandType = CommandType.Text
+            'Define el comando
+            CadenaCmd &= "TipoAfiliado = '" & TipoAfiliado.Trim.ToUpper & "'"
+            CadenaCmd &= " Order by Apellidos, Nombres"
+            Cmd.CommandText = CadenaCmd
+            'Define el lector que recibirá el resultado de la consulta
+            Dim Lector As OleDbDataReader = Cmd.ExecuteReader
+            'Recorrido secuencial por los registros encontrados
+            While Lector.Read
+                'Define el objeto que recibirá los datos
+                Dim Afiliado As New Entidades.Afiliado
+                'Asigna los valores de los campos a los atributos del objeto
+                With Afiliado
+                    If Not IsDBNull(Lector("Id")) Then .Id = Lector("Id")
+                    If Not IsDBNull(Lector("CUIL")) Then .CUIL = Lector("CUIL")
+                    If Not IsDBNull(Lector("DNI")) Then .DNI = Lector("DNI")
+                    If Not IsDBNull(Lector("Apellidos")) Then .Apellidos = Lector("Apellidos")
+                    If Not IsDBNull(Lector("Nombres")) Then .Nombres = Lector("Nombres")
+                    If Not IsDBNull(Lector("FechaNacimiento")) Then .FechaNacimiento = Lector("FechaNacimiento")
+                    If Not IsDBNull(Lector("Genero")) Then .Genero = Lector("Genero")
+                    If Not IsDBNull(Lector("CUIL_Titular")) Then .CUILT_Titular = Lector("CUIL_Titular")
+                    If Not IsDBNull(Lector("Relacion")) Then .Relacion = Lector("Relacion")
+                    If Not IsDBNull(Lector("TipoAfiliado")) Then .TipoAfiliado = Lector("TipoAfiliado")
+                    If Not IsDBNull(Lector("UATRE")) Then .UATRE = Lector("UATRE")
+                    If Not IsDBNull(Lector("Provincia")) Then .Provincia = Lector("Provincia")
+                    If Not IsDBNull(Lector("BocaExpendio")) Then .BocaExpendio = Lector("BocaExpendio")
+                    If Not IsDBNull(Lector("Departamento")) Then .Departamento = Lector("Departamento")
+                    If Not IsDBNull(Lector("Localidad")) Then .Localidad = Lector("Localidad")
+                    If Not IsDBNull(Lector("Domicilio")) Then .Domicilio = Lector("Domicilio")
+                    If Not IsDBNull(Lector("Telefono")) Then .Telefono = Lector("Telefono")
+                    If Not IsDBNull(Lector("Email")) Then .Email = Lector("Email")
+                    If Not IsDBNull(Lector("TipoCarga")) Then .TipoCarga = Lector("TipoCarga")
+                End With
+                'Inserta el objeto a la colección respectiva
+                Valor.Add(Afiliado)
+                'Libera el objeto
+                Afiliado = Nothing
+            End While
+            'Cierra la conexión
+            ConBD.Close()
+        Catch ex As Exception
+            'Copia la cadena de conexión y la de comandos al portapapeles
+            My.Computer.Clipboard.SetText(CadenaConexion & vbCrLf & CadenaCmd)
+            'Defineción del mensaje de error
+            CadenaMsg = ex.Message & CadenaMsg
+            'Genera un nuevo tipo de mensaje de error
+            Throw New ArgumentException(CadenaMsg)
+        Finally
+            'Liberación de objetos utilizados
+            ConBD = Nothing
+            Cmd = Nothing
+        End Try
+        'Valor de retorno de la función
+        Return Valor
+    End Function
 
-            Case "OLEDB"
-                Dim CapaDatos As New CapaDatos.Afiliados
-                Try
-                    'Ejecuta acciones sobre la capa de datos
-                    Valor = CapaDatos.ConsultaTipoAfiliadoOLEDB(CadenaConexion, TipoAfiliado)
-                Catch ex As Exception
-                    'Genera el nuevo error
-                    Throw New ArgumentException(ex.Message)
-                Finally
-                    'Libera el objeto utilizado 
-                    CapaDatos = Nothing
-                End Try
-            Case "MYSQL"
-
-            Case "SQLCE"
-
-        End Select
+    ''' <summary>
+    ''' Función utilizada para buscar el grupo familiar según su atributo "CUIL_Titular"
+    ''' </summary>
+    ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
+    ''' <param name="CUIL_Titular">Obligatorio. CUIL del titular del grupo familiar a buscar.</param>
+    ''' <returns>Colección de objetos de la clase "Afiliado".</returns>
+    ''' <remarks></remarks>
+    Public Function ConsultaGrupoFamiliarLEDB(ByVal CadenaConexion As String, ByVal CUIL_Titular As Int64) As Entidades.Afiliados
+        Dim Valor As New Entidades.Afiliados
+        Dim ConBD As New OleDbConnection
+        Dim Cmd As New OleDbCommand
+        Dim CadenaCmd As String = "Select * from Afiliados Where "
+        Dim TablaCategorias As New List(Of Int64)
+        Dim CadenaMsg As String = vbCrLf & vbCrLf & "   Capa: Datos." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: ConsultaGrupoFamiliarLEDB."
+        Try
+            'Define la cadena de conexión aplicada a la conexión
+            ConBD.ConnectionString = CadenaConexion
+            'Abre la conexión
+            ConBD.Open()
+            'Asigna la conexión abierta al comando instanciado
+            Cmd.Connection = ConBD
+            'Define el tipo de comando a ejecutar
+            Cmd.CommandType = CommandType.Text
+            'Define el comando
+            CadenaCmd &= "CUIL_Titular = " & CUIL_Titular.ToString.Trim
+            CadenaCmd &= " Order by FechaNacimiento"
+            Cmd.CommandText = CadenaCmd
+            'Define el lector que recibirá el resultado de la consulta
+            Dim Lector As OleDbDataReader = Cmd.ExecuteReader
+            'Recorrido secuencial por los registros encontrados
+            While Lector.Read
+                'Define el objeto que recibirá los datos
+                Dim Afiliado As New Entidades.Afiliado
+                'Asigna los valores de los campos a los atributos del objeto
+                With Afiliado
+                    If Not IsDBNull(Lector("Id")) Then .Id = Lector("Id")
+                    If Not IsDBNull(Lector("CUIL")) Then .CUIL = Lector("CUIL")
+                    If Not IsDBNull(Lector("DNI")) Then .DNI = Lector("DNI")
+                    If Not IsDBNull(Lector("Apellidos")) Then .Apellidos = Lector("Apellidos")
+                    If Not IsDBNull(Lector("Nombres")) Then .Nombres = Lector("Nombres")
+                    If Not IsDBNull(Lector("FechaNacimiento")) Then .FechaNacimiento = Lector("FechaNacimiento")
+                    If Not IsDBNull(Lector("Genero")) Then .Genero = Lector("Genero")
+                    If Not IsDBNull(Lector("CUIL_Titular")) Then .CUILT_Titular = Lector("CUIL_Titular")
+                    If Not IsDBNull(Lector("Relacion")) Then .Relacion = Lector("Relacion")
+                    If Not IsDBNull(Lector("TipoAfiliado")) Then .TipoAfiliado = Lector("TipoAfiliado")
+                    If Not IsDBNull(Lector("UATRE")) Then .UATRE = Lector("UATRE")
+                    If Not IsDBNull(Lector("Provincia")) Then .Provincia = Lector("Provincia")
+                    If Not IsDBNull(Lector("BocaExpendio")) Then .BocaExpendio = Lector("BocaExpendio")
+                    If Not IsDBNull(Lector("Departamento")) Then .Departamento = Lector("Departamento")
+                    If Not IsDBNull(Lector("Localidad")) Then .Localidad = Lector("Localidad")
+                    If Not IsDBNull(Lector("Domicilio")) Then .Domicilio = Lector("Domicilio")
+                    If Not IsDBNull(Lector("Telefono")) Then .Telefono = Lector("Telefono")
+                    If Not IsDBNull(Lector("Email")) Then .Email = Lector("Email")
+                    If Not IsDBNull(Lector("TipoCarga")) Then .TipoCarga = Lector("TipoCarga")
+                End With
+                'Inserta el objeto a la colección respectiva
+                Valor.Add(Afiliado)
+                'Libera el objeto
+                Afiliado = Nothing
+            End While
+            'Cierra la conexión
+            ConBD.Close()
+        Catch ex As Exception
+            'Copia la cadena de conexión y la de comandos al portapapeles
+            My.Computer.Clipboard.SetText(CadenaConexion & vbCrLf & CadenaCmd)
+            'Defineción del mensaje de error
+            CadenaMsg = ex.Message & CadenaMsg
+            'Genera un nuevo tipo de mensaje de error
+            Throw New ArgumentException(CadenaMsg)
+        Finally
+            'Liberación de objetos utilizados
+            ConBD = Nothing
+            Cmd = Nothing
+        End Try
         'Valor de retorno de la función
         Return Valor
     End Function
@@ -466,33 +982,76 @@ Public Class Afiliados
     ''' Función utilizada para buscar un afiliado según su atributo "Provincia"
     ''' </summary>
     ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
-    ''' <param name="Provincia">Obligatorio. Provincia del afiliado a buscar.</param>
+    ''' <param name="Provincia">Obligatorio. Relacion del afiliado a buscar.</param>
     ''' <returns>Colección de objetos de la clase "Afiliado".</returns>
     ''' <remarks></remarks>
-    Public Function ConsultaProvincia(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String, ByVal Provincia As String) As Entidades.Afiliados
+    Public Function ConsultaProvinciaOLEDB(ByVal CadenaConexion As String, ByVal Provincia As String) As Entidades.Afiliados
         Dim Valor As New Entidades.Afiliados
-        'Evalúa con que tipo de base de datos se esta trabajando
-        Select Case TipoBaseDatos.ToUpper.Trim
-            Case "SQL"
-
-            Case "OLEDB"
-                Dim CapaDatos As New CapaDatos.Afiliados
-                Try
-                    'Ejecuta acciones sobre la capa de datos
-                    Valor = CapaDatos.ConsultaProvinciaOLEDB(CadenaConexion, Provincia)
-                Catch ex As Exception
-                    'Genera el nuevo error
-                    Throw New ArgumentException(ex.Message)
-                Finally
-                    'Libera el objeto utilizado 
-                    CapaDatos = Nothing
-                End Try
-            Case "MYSQL"
-
-            Case "SQLCE"
-
-        End Select
+        Dim ConBD As New OleDbConnection
+        Dim Cmd As New OleDbCommand
+        Dim CadenaCmd As String = "Select * from Afiliados Where "
+        Dim TablaCategorias As New List(Of Int64)
+        Dim CadenaMsg As String = vbCrLf & vbCrLf & "   Capa: Datos." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: ConsultaProvinciaOLEDB."
+        Try
+            'Define la cadena de conexión aplicada a la conexión
+            ConBD.ConnectionString = CadenaConexion
+            'Abre la conexión
+            ConBD.Open()
+            'Asigna la conexión abierta al comando instanciado
+            Cmd.Connection = ConBD
+            'Define el tipo de comando a ejecutar
+            Cmd.CommandType = CommandType.Text
+            'Define el comando
+            CadenaCmd &= "Provincia = '" & Provincia.Trim.ToUpper & "'"
+            CadenaCmd &= " Order by Apellidos, Nombres"
+            Cmd.CommandText = CadenaCmd
+            'Define el lector que recibirá el resultado de la consulta
+            Dim Lector As OleDbDataReader = Cmd.ExecuteReader
+            'Recorrido secuencial por los registros encontrados
+            While Lector.Read
+                'Define el objeto que recibirá los datos
+                Dim Afiliado As New Entidades.Afiliado
+                'Asigna los valores de los campos a los atributos del objeto
+                With Afiliado
+                    If Not IsDBNull(Lector("Id")) Then .Id = Lector("Id")
+                    If Not IsDBNull(Lector("CUIL")) Then .CUIL = Lector("CUIL")
+                    If Not IsDBNull(Lector("DNI")) Then .DNI = Lector("DNI")
+                    If Not IsDBNull(Lector("Apellidos")) Then .Apellidos = Lector("Apellidos")
+                    If Not IsDBNull(Lector("Nombres")) Then .Nombres = Lector("Nombres")
+                    If Not IsDBNull(Lector("FechaNacimiento")) Then .FechaNacimiento = Lector("FechaNacimiento")
+                    If Not IsDBNull(Lector("Genero")) Then .Genero = Lector("Genero")
+                    If Not IsDBNull(Lector("CUIL_Titular")) Then .CUILT_Titular = Lector("CUIL_Titular")
+                    If Not IsDBNull(Lector("Relacion")) Then .Relacion = Lector("Relacion")
+                    If Not IsDBNull(Lector("TipoAfiliado")) Then .TipoAfiliado = Lector("TipoAfiliado")
+                    If Not IsDBNull(Lector("UATRE")) Then .UATRE = Lector("UATRE")
+                    If Not IsDBNull(Lector("Provincia")) Then .Provincia = Lector("Provincia")
+                    If Not IsDBNull(Lector("BocaExpendio")) Then .BocaExpendio = Lector("BocaExpendio")
+                    If Not IsDBNull(Lector("Departamento")) Then .Departamento = Lector("Departamento")
+                    If Not IsDBNull(Lector("Localidad")) Then .Localidad = Lector("Localidad")
+                    If Not IsDBNull(Lector("Domicilio")) Then .Domicilio = Lector("Domicilio")
+                    If Not IsDBNull(Lector("Telefono")) Then .Telefono = Lector("Telefono")
+                    If Not IsDBNull(Lector("Email")) Then .Email = Lector("Email")
+                    If Not IsDBNull(Lector("TipoCarga")) Then .TipoCarga = Lector("TipoCarga")
+                End With
+                'Inserta el objeto a la colección respectiva
+                Valor.Add(Afiliado)
+                'Libera el objeto
+                Afiliado = Nothing
+            End While
+            'Cierra la conexión
+            ConBD.Close()
+        Catch ex As Exception
+            'Copia la cadena de conexión y la de comandos al portapapeles
+            My.Computer.Clipboard.SetText(CadenaConexion & vbCrLf & CadenaCmd)
+            'Defineción del mensaje de error
+            CadenaMsg = ex.Message & CadenaMsg
+            'Genera un nuevo tipo de mensaje de error
+            Throw New ArgumentException(CadenaMsg)
+        Finally
+            'Liberación de objetos utilizados
+            ConBD = Nothing
+            Cmd = Nothing
+        End Try
         'Valor de retorno de la función
         Return Valor
     End Function
@@ -501,33 +1060,75 @@ Public Class Afiliados
     ''' Función utilizada para buscar un afiliado según su atributo "BocaExpendio"
     ''' </summary>
     ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
-    ''' <param name="BocaExpendio">Obligatorio. Número de boca de expendio del afiliado a buscar.</param>
+    ''' <param name="BocaExpendio">Obligatorio. BocaExpendio del afiliado a buscar.</param>
     ''' <returns>Colección de objetos de la clase "Afiliado".</returns>
     ''' <remarks></remarks>
-    Public Function ConsultaBocaExpendio(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String, ByVal BocaExpendio As Int64) As Entidades.Afiliados
+    Public Function ConsultaBocaExpendioOLEDB(ByVal CadenaConexion As String, ByVal BocaExpendio As Int64) As Entidades.Afiliados
         Dim Valor As New Entidades.Afiliados
-        'Evalúa con que tipo de base de datos se esta trabajando
-        Select Case TipoBaseDatos.ToUpper.Trim
-            Case "SQL"
-
-            Case "OLEDB"
-                Dim CapaDatos As New CapaDatos.Afiliados
-                Try
-                    'Ejecuta acciones sobre la capa de datos
-                    Valor = CapaDatos.ConsultaBocaExpendioOLEDB(CadenaConexion, BocaExpendio)
-                Catch ex As Exception
-                    'Genera el nuevo error
-                    Throw New ArgumentException(ex.Message)
-                Finally
-                    'Libera el objeto utilizado 
-                    CapaDatos = Nothing
-                End Try
-            Case "MYSQL"
-
-            Case "SQLCE"
-
-        End Select
+        Dim ConBD As New OleDbConnection
+        Dim Cmd As New OleDbCommand
+        Dim CadenaCmd As String = "Select * from Afiliados Where "
+        Dim TablaCategorias As New List(Of Int64)
+        Dim CadenaMsg As String = vbCrLf & vbCrLf & "   Capa: Datos." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: ConsultaBocaExpendioLEDB."
+        Try
+            'Define la cadena de conexión aplicada a la conexión
+            ConBD.ConnectionString = CadenaConexion
+            'Abre la conexión
+            ConBD.Open()
+            'Asigna la conexión abierta al comando instanciado
+            Cmd.Connection = ConBD
+            'Define el tipo de comando a ejecutar
+            Cmd.CommandType = CommandType.Text
+            'Define el comando
+            CadenaCmd &= "BocaExpendio = " & BocaExpendio.ToString.Trim.ToUpper
+            Cmd.CommandText = CadenaCmd
+            'Define el lector que recibirá el resultado de la consulta
+            Dim Lector As OleDbDataReader = Cmd.ExecuteReader
+            'Recorrido secuencial por los registros encontrados
+            While Lector.Read
+                'Define el objeto que recibirá los datos
+                Dim Afiliado As New Entidades.Afiliado
+                'Asigna los valores de los campos a los atributos del objeto
+                With Afiliado
+                    If Not IsDBNull(Lector("Id")) Then .Id = Lector("Id")
+                    If Not IsDBNull(Lector("CUIL")) Then .CUIL = Lector("CUIL")
+                    If Not IsDBNull(Lector("DNI")) Then .DNI = Lector("DNI")
+                    If Not IsDBNull(Lector("Apellidos")) Then .Apellidos = Lector("Apellidos")
+                    If Not IsDBNull(Lector("Nombres")) Then .Nombres = Lector("Nombres")
+                    If Not IsDBNull(Lector("FechaNacimiento")) Then .FechaNacimiento = Lector("FechaNacimiento")
+                    If Not IsDBNull(Lector("Genero")) Then .Genero = Lector("Genero")
+                    If Not IsDBNull(Lector("CUIL_Titular")) Then .CUILT_Titular = Lector("CUIL_Titular")
+                    If Not IsDBNull(Lector("Relacion")) Then .Relacion = Lector("Relacion")
+                    If Not IsDBNull(Lector("TipoAfiliado")) Then .TipoAfiliado = Lector("TipoAfiliado")
+                    If Not IsDBNull(Lector("UATRE")) Then .UATRE = Lector("UATRE")
+                    If Not IsDBNull(Lector("Provincia")) Then .Provincia = Lector("Provincia")
+                    If Not IsDBNull(Lector("BocaExpendio")) Then .BocaExpendio = Lector("BocaExpendio")
+                    If Not IsDBNull(Lector("Departamento")) Then .Departamento = Lector("Departamento")
+                    If Not IsDBNull(Lector("Localidad")) Then .Localidad = Lector("Localidad")
+                    If Not IsDBNull(Lector("Domicilio")) Then .Domicilio = Lector("Domicilio")
+                    If Not IsDBNull(Lector("Telefono")) Then .Telefono = Lector("Telefono")
+                    If Not IsDBNull(Lector("Email")) Then .Email = Lector("Email")
+                    If Not IsDBNull(Lector("TipoCarga")) Then .TipoCarga = Lector("TipoCarga")
+                End With
+                'Inserta el objeto a la colección respectiva
+                Valor.Add(Afiliado)
+                'Libera el objeto
+                Afiliado = Nothing
+            End While
+            'Cierra la conexión
+            ConBD.Close()
+        Catch ex As Exception
+            'Copia la cadena de conexión y la de comandos al portapapeles
+            My.Computer.Clipboard.SetText(CadenaConexion & vbCrLf & CadenaCmd)
+            'Defineción del mensaje de error
+            CadenaMsg = ex.Message & CadenaMsg
+            'Genera un nuevo tipo de mensaje de error
+            Throw New ArgumentException(CadenaMsg)
+        Finally
+            'Liberación de objetos utilizados
+            ConBD = Nothing
+            Cmd = Nothing
+        End Try
         'Valor de retorno de la función
         Return Valor
     End Function
@@ -536,33 +1137,52 @@ Public Class Afiliados
     ''' Función utilizada para buscar las distintas bocas de expendio
     ''' </summary>
     ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
-    ''' <param name="Provincia">Obligatorio. Provincia a las que pertenecen las bocas de expendio.</param>
+    ''' <param name="Provincia">Obligatorio. Proviencia a la que pertenece la bocaExpendio del afiliado a buscar.</param>
     ''' <returns>Lista de cadenas de caracteres con las distintias bocas de expendio.</returns>
     ''' <remarks></remarks>
-    Public Function ConsultaDistintasBocasExpendio(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String, ByVal Provincia As String) As List(Of String)
+    Public Function ConsultaDistintasBocasExpendioOLEDB(ByVal CadenaConexion As String, ByVal Provincia As String) As List(Of String)
         Dim Valor As New List(Of String)
-        'Evalúa con que tipo de base de datos se esta trabajando
-        Select Case TipoBaseDatos.ToUpper.Trim
-            Case "SQL"
-
-            Case "OLEDB"
-                Dim CapaDatos As New CapaDatos.Afiliados
-                Try
-                    'Ejecuta acciones sobre la capa de datos
-                    Valor = CapaDatos.ConsultaDistintasBocasExpendioOLEDB(CadenaConexion, Provincia)
-                Catch ex As Exception
-                    'Genera el nuevo error
-                    Throw New ArgumentException(ex.Message)
-                Finally
-                    'Libera el objeto utilizado 
-                    CapaDatos = Nothing
-                End Try
-            Case "MYSQL"
-
-            Case "SQLCE"
-
-        End Select
+        Dim ConBD As New OleDbConnection
+        Dim Cmd As New OleDbCommand
+        Dim CadenaCmd As String = "Select Distinct(BocaExpendio) as BocaExpendio from Afiliados Where "
+        Dim TablaCategorias As New List(Of Int64)
+        Dim CadenaMsg As String = vbCrLf & vbCrLf & "   Capa: Datos." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: ConsultaDistintasBocasExpendioOLEDB."
+        Try
+            'Define la cadena de conexión aplicada a la conexión
+            ConBD.ConnectionString = CadenaConexion
+            'Abre la conexión
+            ConBD.Open()
+            'Asigna la conexión abierta al comando instanciado
+            Cmd.Connection = ConBD
+            'Define el tipo de comando a ejecutar
+            Cmd.CommandType = CommandType.Text
+            'Define el comando
+            CadenaCmd &= " Provincia = '" & Provincia.ToUpper.Trim & "'"
+            CadenaCmd &= " Order by BocaExpendio "
+            Cmd.CommandText = CadenaCmd
+            'Define el lector que recibirá el resultado de la consulta
+            Dim Lector As OleDbDataReader = Cmd.ExecuteReader
+            'Recorrido secuencial por los registros encontrados
+            While Lector.Read
+                If Not IsDBNull(Lector("BocaExpendio")) Then
+                        'Inserta la boca de expendio a la lista
+                        Valor.Add(Lector("BocaExpendio"))
+                    End If
+            End While
+            'Cierra la conexión
+            ConBD.Close()
+        Catch ex As Exception
+            'Copia la cadena de conexión y la de comandos al portapapeles
+            My.Computer.Clipboard.SetText(CadenaConexion & vbCrLf & CadenaCmd)
+            'Defineción del mensaje de error
+            CadenaMsg = ex.Message & CadenaMsg
+            'Genera un nuevo tipo de mensaje de error
+            Throw New ArgumentException(CadenaMsg)
+        Finally
+            'Liberación de objetos utilizados
+            ConBD = Nothing
+            Cmd = Nothing
+        End Try
         'Valor de retorno de la función
         Return Valor
     End Function
@@ -571,77 +1191,53 @@ Public Class Afiliados
     ''' Función utilizada para buscar las distintas provincias
     ''' </summary>
     ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
     ''' <returns>Lista de cadenas de caracteres con las distintias provincias.</returns>
     ''' <remarks></remarks>
-    Public Function ConsultaDistintasProvincias(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String) As List(Of String)
+    Public Function ConsultaDistintasProvinciasOLEDB(ByVal CadenaConexion As String) As List(Of String)
         Dim Valor As New List(Of String)
-        'Evalúa con que tipo de base de datos se esta trabajando
-        Select Case TipoBaseDatos.ToUpper.Trim
-            Case "SQL"
-
-            Case "OLEDB"
-                Dim CapaDatos As New CapaDatos.Afiliados
-                Try
-                    'Ejecuta acciones sobre la capa de datos
-                    Valor = CapaDatos.ConsultaDistintasProvinciasOLEDB(CadenaConexion)
-                Catch ex As Exception
-                    'Genera el nuevo error
-                    Throw New ArgumentException(ex.Message)
-                Finally
-                    'Libera el objeto utilizado 
-                    CapaDatos = Nothing
-                End Try
-            Case "MYSQL"
-
-            Case "SQLCE"
-
-        End Select
+        Dim ConBD As New OleDbConnection
+        Dim Cmd As New OleDbCommand
+        Dim CadenaCmd As String = "Select Distinct(Provincia) as Provincia from Afiliados "
+        Dim TablaCategorias As New List(Of Int64)
+        Dim CadenaMsg As String = vbCrLf & vbCrLf & "   Capa: Datos." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: ConsultaDistintasProvinciasOLEDB."
+        Try
+            'Define la cadena de conexión aplicada a la conexión
+            ConBD.ConnectionString = CadenaConexion
+            'Abre la conexión
+            ConBD.Open()
+            'Asigna la conexión abierta al comando instanciado
+            Cmd.Connection = ConBD
+            'Define el tipo de comando a ejecutar
+            Cmd.CommandType = CommandType.Text
+            'Define el comando
+            CadenaCmd &= " Order by Provincia"
+            Cmd.CommandText = CadenaCmd
+            'Define el lector que recibirá el resultado de la consulta
+            Dim Lector As OleDbDataReader = Cmd.ExecuteReader
+            'Recorrido secuencial por los registros encontrados
+            While Lector.Read
+                If Not IsDBNull(Lector("Provincia")) Then
+                    'Inserta la boca de expendio a la lista
+                    Valor.Add(Lector("Provincia"))
+                End If
+            End While
+            'Cierra la conexión
+            ConBD.Close()
+        Catch ex As Exception
+            'Copia la cadena de conexión y la de comandos al portapapeles
+            My.Computer.Clipboard.SetText(CadenaConexion & vbCrLf & CadenaCmd)
+            'Defineción del mensaje de error
+            CadenaMsg = ex.Message & CadenaMsg
+            'Genera un nuevo tipo de mensaje de error
+            Throw New ArgumentException(CadenaMsg)
+        Finally
+            'Liberación de objetos utilizados
+            ConBD = Nothing
+            Cmd = Nothing
+        End Try
         'Valor de retorno de la función
         Return Valor
     End Function
-
-    ''' <summary>
-    ''' Procedimiento utilizado para validar los datos de un afiliado
-    ''' </summary>
-    ''' <param name="CadenaConexion">Obligatorio. Cadena de caracteres con la cadena de conexión a la base de datos.</param>
-    ''' <param name="TipoBaseDatos">Obligatorio. Cadena de caracteres con el tipo de base de datos a utilizar.</param>
-    ''' <param name="Afiliado">Obligatorio. Objeto de la clase "Practica", con todos los atributos necesarios para ser validado.</param>
-    ''' <param name="Alta">Opcional. Valor booleano que indica</param>
-    ''' <remarks></remarks>
-    Public Sub Validar(ByVal CadenaConexion As String, ByVal TipoBaseDatos As String, ByVal Afiliado As Entidades.Afiliado, Optional ByVal Alta As Boolean = False)
-        Dim CadenaMsg As String = ""
-        Dim RutaError As String = "   Capa: Negocios." & vbCrLf & "   Clase: Afiliados." & vbCrLf & "   Método: Validar."
-        'Validación del CUIL
-        If CadenaMsg.Trim.Length = 0 Then
-            If Afiliado.CUIL = 0 Then
-                CadenaMsg = "No se definió el CUIL del afiliado."
-            End If
-        End If
-        'Validación del DNI
-        If CadenaMsg.Trim.Length = 0 Then
-            If Afiliado.DNI = 0 Then
-                CadenaMsg = "No se definió el DNI."
-            End If
-        End If
-        'Validación del apellido
-        If CadenaMsg.Trim.Length = 0 Then
-            If Afiliado.Apellidos.Trim.Length = 0 Then
-                CadenaMsg = "No se definió el apellido."
-            End If
-        End If
-        'Validación del nombre
-        If CadenaMsg.Trim.Length = 0 Then
-            If Afiliado.Nombres.Trim.Length = 0 Then
-                CadenaMsg = "No se definió el nombre."
-            End If
-        End If
-        'Genera el mensaje completo del error
-        If CadenaMsg.Trim.Length > 0 Then
-            CadenaMsg = "Error de validación de datos." & vbCrLf & CadenaMsg
-            Throw New ArgumentException(CadenaMsg)
-        End If
-    End Sub
 
 #End Region
 
